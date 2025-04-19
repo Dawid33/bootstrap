@@ -3,7 +3,7 @@ name: Build Project
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: docker
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
