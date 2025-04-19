@@ -1,0 +1,10 @@
+#define TCC_VERSION "0.9.27"
+#define CONFIG_TCC_STATIC 1
+#define CONFIG_TCC_SEMLOCK 0
+#define CONFIG_TCC_PREDEFS 0
+#define TCC_TARGET_X86_64 1
+#define ONE_SOURCE 1
+#define TCC_MUSL 1
+#define CONFIG_TCCDIR "../tcc-bootstrap"
+#define CONFIG_LDDIR "lib/x86_64-linux-gnu"
+#define inline
