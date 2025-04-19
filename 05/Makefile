@@ -25,6 +25,7 @@ musl: tcc-files
 	mkdir -p musl-bootstrap/include
 	mkdir -p musl-bootstrap/bin
 	mkdir -p musl-bootstrap/lib
+	mkdir -p musl-0.6.0/lib
 	$(MAKE) -j8 -C musl-0.6.0
 	$(MAKE) -C musl-0.6.0 install
 tcc-files: $(TCCDIR)/lib/libtcc1.a $(TCCDIR)/include/*.h
