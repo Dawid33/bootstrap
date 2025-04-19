@@ -8,5 +8,5 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v4
       - name: Build
-        run: make
+        run: sudo make
             
