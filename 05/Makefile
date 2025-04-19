@@ -42,7 +42,7 @@ musl-final: tcc
 	$(MAKE) -C musl-final
 tcc-final: tcc musl-final
 	cd tcc-final && ../$(TCCDIR)/tcc -Wall -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-final/include tcc.c ../musl-final/lib/*.[oa] -o tcc
-testapp: tcc musl-final
+testapp: tcc-final musl-final
 	./tcc-final/tcc -Wall -g -static -nostdinc -nostdlib -I ./tcc-final/include -I ./musl-final/include test.c ./musl-final/lib/*.[oa] -o test
 
 $(TCC)2: $(TCC)1
