@@ -9,7 +9,7 @@ set -uex
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b1-clang/bin"
 export PATH="$PATH:/store/2b3-gnumake/bin"
-export PATH="$PATH:/store/3a-pkg-config/bin"
+export PATH="$PATH:/store/2c2-pkg-config/bin"
 export PKG_CONFIG_PATH='/store/3a-openssl/lib64/pkgconfig'
 
 mkdir -p /tmp/3a-libsodium; cd /tmp/3a-libsodium

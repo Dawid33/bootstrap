@@ -9,6 +9,7 @@ export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b1-clang/bin"
 export PATH="$PATH:/store/2b3-gnumake/wrappers"
 
+rm -rf /tmp/3b-busybox-static
 mkdir -p /tmp/3b-busybox-static; cd /tmp/3b-busybox-static
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
@@ -32,17 +33,17 @@ sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|g' \
 	scripts/mkconfigs scripts/embedded_scripts scripts/trylink \
 	scripts/generate_BUFSIZ.sh \
 	applets/usage_compressed applets/busybox.mkscripts applets/install.sh
-make -j $NPROC $BUSYBOX_FLAGS defconfig
+LDFLAGS="--static" make -j $NPROC $BUSYBOX_FLAGS defconfig
 sed -i 's|CONFIG_INSTALL_NO_USR=y|CONFIG_INSTALL_NO_USR=n|' .config
 sed -i 's|CONFIG_FEATURE_SHARED_BUSYBOX=y|CONFIG_FEATURE_SHARED_BUSYBOX=n|' \
 	.config
 
 echo "### $0: building busybox..."
-make -j $NPROC $BUSYBOX_FLAGS "$BUSYBOX_CFLAGS" busybox busybox.links
+LDFLAGS="--static" make -j $NPROC $BUSYBOX_FLAGS "$BUSYBOX_CFLAGS" busybox busybox.links
 sed -i 's|^/usr/s\?bin/|/bin/|' busybox.links
 
 echo "### $0: installing busybox..."
-make -j $NPROC $BUSYBOX_FLAGS "$BUSYBOX_CFLAGS" \
+LDFLAGS="--static" make -j $NPROC $BUSYBOX_FLAGS "$BUSYBOX_CFLAGS" \
 	install CONFIG_PREFIX=/store/3b-busybox-static
 
 echo "### $0: checking for build path leaks..."

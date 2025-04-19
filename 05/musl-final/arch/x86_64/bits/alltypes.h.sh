@@ -1,5 +1,5 @@
 #!/bin/sh
-sed -e << EOF \
+../../busybox sed -e << EOF \
 '/^TYPEDEF/s/TYPEDEF \(.*\) \([^ ]*\);$/#if defined(__NEED_\2) \&\& !defined(__DEFINED_\2)\
 typedef \1 \2;\
 #define __DEFINED_\2\

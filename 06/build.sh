@@ -9,7 +9,7 @@
 
 set -uex
 
-export NPROC=${NPROC:-${1:-1}}
+export NPROC=$(nproc --all)
 
 cp ../05/tcc-final/tcc tcc-seed
 
@@ -44,6 +44,7 @@ CHROOT=$(command -v chroot)
 exec env -i "NPROC=$NPROC" unshare -nrm bash -uexs <<EOF
 	$MKDIR stage/dev; :> stage/dev/null
 	$MOUNT --bind /dev/null stage/dev/null
+  $MOUNT -t tmpfs /dev/shm stage/dev/shm
 
 	exec $CHROOT stage \
 		/store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run \

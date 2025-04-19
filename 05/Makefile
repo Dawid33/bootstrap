@@ -33,7 +33,7 @@ tcc-files: $(TCCDIR)/lib/libtcc1.a $(TCCDIR)/include/*.h
 	cp -r $(TCCDIR)/include/*.h $(TCCINST)/include/
 	cp -r $(TCCDIR)/lib/libtcc1.a $(TCCINST)/
 $(TCC): $(TCC0) musl
-	cd $(TCCDIR) && ./tcc0 -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-bootstrap/include tcc.c ../musl-bootstrap/lib/*.[oa] -o tcc
+	cd $(TCCDIR) && ./tcc0 -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-bootstrap/include tcc.c ../musl-bootstrap/lib/*.[oa] -o tcc
 tcc: $(TCC)
 musl-final: tcc
 	mkdir -p musl-bootstrap-final/include

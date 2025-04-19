@@ -2,7 +2,7 @@ tcc-seed
 
 /stage
 /tmp
-/downloads
+downloads/*
 
 /log
 /log.tmp

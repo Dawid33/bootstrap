@@ -18,22 +18,17 @@ export SOURCE_DATE_EPOCH=0
 /recipes/2b1-clang.sh
 /recipes/2b2-busybox.sh
 /recipes/2b3-gnumake.sh
-/recipes/3a-sqlite.sh
-/recipes/3a-boost.sh
-/recipes/3a-mbedtls.sh
-/recipes/3a-pkg-config.sh
-/recipes/3a-curl.sh
-/recipes/3a-editline.sh
-/recipes/3a-brotli.sh
-/recipes/3a-gnugperf.sh
-/recipes/3a-seccomp.sh
-/recipes/3a-libarchive.sh
-/recipes/3a-libsodium.sh
-/recipes/3a-lowdown.sh
-/recipes/3a-nlohmann-json.sh
-/recipes/3b-busybox-static.sh
-/recipes/3b-tinycc-static.sh
-/recipes/3b-zig.sh
-# /recipes/3b-nix.sh
-# /recipes/4-rebootstrap-using-nix.sh
-# /recipes/5-go-beyond-using-nix.sh
+/recipes/2b4-gnugcc13.sh
+/recipes/2b5-m4.sh
+/recipes/2b6-grep.sh
+/recipes/2b7-gawk.sh
+/recipes/2b8-bison.sh
+/recipes/2b9-binutils.sh
+/recipes/2c0-glibc.sh
+/recipes/2c1-zlib.sh
+/recipes/2c2-pkg-config.sh
+/recipes/2c3-perl.sh
+/recipes/2c4-mrustc.sh
+/recipes/2c5-rust.sh
+
+/recipes/3b1-busybox-static.sh

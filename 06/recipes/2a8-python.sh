@@ -12,6 +12,7 @@ export PATH="$PATH:/store/2a5-gnugcc10/bin"
 
 export SHELL=/store/1-stage1/protobusybox/bin/ash
 
+rm -rf /tmp/2a8-python
 mkdir -p /tmp/2a8-python; cd /tmp/2a8-python
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
@@ -43,8 +44,6 @@ sed -i 's|vars, stream=f|vars, stream=f, width=2**24|' Lib/sysconfig.py
 echo "### $0: building CPython..."
 mkdir -p /store/2a8-python/lib
 ash configure \
-	ac_cv_broken_sem_getvalue=yes \
-	ac_cv_posix_semaphores_enabled=no \
 	OPT='-DNDEBUG -fwrapv -O3 -Wall' \
 	LDFLAGS='-Wl,-rpath /store/2a8-python/lib' \
 	--without-static-libpython \
@@ -52,9 +51,6 @@ ash configure \
 	--prefix=/store/2a8-python \
 	--enable-shared \
 	--with-ensurepip=no
-# ensure reproducibility in case of no /dev/shm
-grep 'define POSIX_SEMAPHORES_NOT_ENABLED 1' pyconfig.h
-grep 'define HAVE_BROKEN_SEM_GETVALUE 1' pyconfig.h
 make -j $NPROC
 
 echo "### $0: installing CPython..."

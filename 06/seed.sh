@@ -10,13 +10,10 @@ fi
 
 rm -rf stage
 mkdir -p stage/store
-cp -raL --reflink=auto downloads recipes default.nix flake.nix stage/
+cp -raL --reflink=auto downloads recipes stage/
 
 # I'm too lazy to pass it through stage1
 sed -i "s|\$NPROC|$NPROC|" stage/recipes/*.sh
 
 DESTDIR=stage recipes/0-tcc-seed/seed.host-executed.sh  # copy tcc-seed
 DESTDIR=stage recipes/1-stage1/seed.host-executed.sh    # unpack stage1 sources
-# Everything past stage1 will unpack sources from downloads/ all by itself
-# all the way until
-cp -r using-nix stage/

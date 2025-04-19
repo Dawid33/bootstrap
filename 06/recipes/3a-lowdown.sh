@@ -9,7 +9,7 @@ set -uex
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b1-clang/bin"
 export PATH="$PATH:/store/2b3-gnumake/wrappers"
-export PATH="$PATH:/store/3a-pkg-config/bin"
+export PATH="$PATH:/store/2c2-pkg-config/bin"
 export PKG_CONFIG_PATH='/store/3a-openssl/lib64/pkgconfig'
 export SHELL='/store/2b2-busybox/bin/ash'
 
