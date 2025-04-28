@@ -9,6 +9,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup chroot
         run: su root && chroot $(pwd) /busybox ash
-      - name: Build TCC
+      - name: Build tcc
         run: su root && chroot $(pwd) /busybox ash initboot.sh
+      - name: Build tcc, musl and busybox
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./06/ci_stage1.sh'
             
