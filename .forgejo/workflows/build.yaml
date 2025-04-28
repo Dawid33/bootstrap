@@ -8,9 +8,7 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v4
       - name: Setup chroot
-        run: |
-          su root
-          chroot $(pwd) /busybox ash
+        run: su root && chroot $(pwd) /busybox ash
       - name: Build TCC
-        run: /busybox ash initboot.sh
+        run: su root && chroot $(pwd) /busybox ash initboot.sh
             
