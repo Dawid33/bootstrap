@@ -51,7 +51,7 @@ set -x
 	../busybox mkdir -p musl-bootstrap/bin
 	../busybox mkdir -p musl-bootstrap/lib
 	../busybox mkdir -p musl-0.6.0/lib
-	(cd musl-0.6.0 && ./build.sh)
+	(cd musl-0.6.0 && ../../busybox ash ./build.sh)
 
 	(cd $TCCDIR && ./tcc0 -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-bootstrap/include tcc.c ../musl-bootstrap/lib/*.[oa] -o tcc)
 
@@ -59,7 +59,7 @@ set -x
 	../busybox mkdir -p musl-bootstrap-final/include
 	../busybox mkdir -p musl-bootstrap-final/bin
 	../busybox mkdir -p musl-bootstrap-final/lib
-	(cd musl-final && ./build.sh)
+	(cd musl-final && ../../busybox ash ./build.sh)
 
 	(cd tcc-final && ../$TCCDIR/tcc -Wall -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-final/include tcc.c ../musl-final/lib/*.[oa] -o tcc)
 )
