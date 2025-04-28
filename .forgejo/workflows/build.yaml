@@ -21,17 +21,11 @@ jobs:
 
       - name: Download tarballs and build proto-{tcc,musl,busybox}
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci_stage1.sh'
-
-      - name: Build static-gnumake
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a0-static-gnumake.sh'
-
       - name: Build 2a0-static-gnumake
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a0-static-gnumake.sh'
-
-      - name: Build 2a1-static-binutils.sh
+      - name: Build 2a1-static-binutils
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a1-static-binutils.sh'
-
-      - name: Build 2a2-static-gnugcc4-c.sh
+      - name: Build 2a2-static-gnugcc4-c
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a2-static-gnugcc4-c.sh'
       - name: Build 2a3-intermediate-musl
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a3-intermediate-musl.sh'
