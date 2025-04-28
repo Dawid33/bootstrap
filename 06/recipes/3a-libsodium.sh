@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 # FETCH 6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1
-#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/libsodium-1.0.18.tar.gz
+#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/libsodium-1.0.18.tar.gz
 
 
 set -uex

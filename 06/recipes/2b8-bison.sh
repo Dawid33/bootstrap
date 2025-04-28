@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH 1e0a14a8bf52d878e500c33d291026b9ebe969c27b3998d4b4285ab6dbce4527
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/bison-3.8.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/bison-3.8.tar.xz
 
 set -uex
 

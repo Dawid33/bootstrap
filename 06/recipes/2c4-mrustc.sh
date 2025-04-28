@@ -1,19 +1,19 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH baf1e86311e004a638b35730b4d7e72644938a6bbbbf65a862245b92ba5325ad
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/v0.11.2.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mrustc-0.11.2.tar.gz
 #>    AS mrustc-0.11.2.tar.gz
  
 #  FETCH 96f934d60d281948b515fee979f0fd2cde4ef83afd9881ed0469245814c868e7
-#   FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc_bootstrapped-v1.74.tar.gz
+#   FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc_bootstrapped-v1.74.tar.gz
 #     AS rustc_bootstrapped-v1.74.tar.gz
 
 #> FETCH 882b584bc321c5dcfe77cdaa69f277906b936255ef7808fcd5c7492925cf1049
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc-1.74.0-src.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc-1.74.0-src.tar.gz
 #>    AS rustc-1.74.0-src.tar.gz
 
-#> FETCH 022a27286df67900a044d227d9db69d4732ec3d833e4ffc259c4425ed71eed80
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc-1.75.0-src.tar.gz
+#> FETCH 5b739f45bc9d341e2d1c570d65d2375591e22c2d23ef5b8a37711a0386abc088
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc-1.75.0-src.tar.gz
  
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2a7-cmake/bin"

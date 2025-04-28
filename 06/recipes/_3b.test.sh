@@ -44,7 +44,7 @@ echo 'oh come on' >/dev/urandom
 
 echo "### $0: testing that derivation assumes a known input hash..."
 nix repl > known-drv-hash.output <<\EOF
-  # see https://nixos.org/guides/nix-pills/our-first-derivation.html
+  # see http://nixos.org/guides/nix-pills/our-first-derivation.html
   derivation { name = "myname"; builder = "mybuilder"; system = "mysystem"; }
 EOF
 grep -Fx '«derivation /nix/store/z3hhlxbckx4g3n9sw91nnvlkjvyw754p-myname.drv»' \

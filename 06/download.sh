@@ -15,26 +15,28 @@ set -ue
 
 : ${DESTDIR:=stage/downloads}  # final location of putting the file
 : ${ONLY:=all}  # allow to limit to just a single file
-mkdir -p downloads   # first cached there, so that stage can be cleaned freely
+../busybox mkdir -p downloads   # first cached there, so that stage can be cleaned freely
 
 fetch() {
-	hash=$1; url=$2; filename=${3:-$(basename "$url")}
-	if [[ -e "downloads/$filename" ]]; then
-		pushd downloads >/dev/null
-			echo "$hash $filename" | sha256sum -c
-		popd >/dev/null
+	hash=$1; url=$2; filename=${3:-$(../busybox basename "$url")}
+	if [ -e "downloads/$filename" ]; then
+		cd downloads 
+			echo "$hash $filename" | ../../busybox sed -e 's/^[[:space:]]*//' | ../../busybox sha256sum -c
+		cd -
 	else
-		mkdir -p downloads/.tmp$$
-		pushd downloads/.tmp$$ >/dev/null
-			wget -nv --show-progress "$url" -O "$filename"
-			echo "$hash $filename" | sha256sum -c --quiet
-		popd >/dev/null
-		mv "downloads/.tmp$$/$filename" downloads/
-		rm -d downloads/.tmp$$
+		echo "wget $url"
+		../busybox mkdir -p downloads/.tmp$$
+		cd  downloads/.tmp$$
+			../../../busybox wget "$url" -O "$filename" --no-check-certificate
+			echo "$hash $filename" | ../../../busybox sed -e 's/^[[:space:]]*//' > .sha
+			../../../busybox sha256sum -c .sha
+		cd - 
+		../busybox mv "downloads/.tmp$$/$filename" downloads/
+		../busybox rm -rf downloads/.tmp$$
 	fi
-	if [[ "${DESTDIR:-}" != downloads ]]; then
-		mkdir -p "$DESTDIR"
-		cp -a --reflink=auto "downloads/$filename" \
+	if [ "${DESTDIR:-}" != downloads ]; then
+		../busybox mkdir -p "$DESTDIR"
+		../busybox cp -a --reflink=auto "downloads/$filename" \
 			"$DESTDIR/$filename"
 	fi
 }
@@ -49,28 +51,27 @@ NIX_REGEX_AS='^[[:blank:]]*#[[:blank:]]local[[:blank:]]*=[[:blank:]]*/downloads/
 process_commands_in() {
 	hash=''; url=''; filename=''
 	while read -r line; do
-		if [[ "$line" =~ $REGEX_MAGIC ]]; then
-			if [[ "$line" =~ $REGEX_FETCH ]]; then
+		if echo "$line" | ../busybox grep -q "$REGEX_MAGIC"; then
+			if echo "$line" | ../busybox grep -q "$REGEX_FETCH"; then
 				hash="${line##"#> FETCH"}"
-			elif [[ "$line" =~ $REGEX_FROM ]]; then
+			elif echo "$line" | ../busybox grep -q "$REGEX_FROM"; then
 				url="${line##'#>  FROM '}"
-			elif [[ "$line" =~ $REGEX_AS ]]; then
+			elif echo "$line" | ../busybox grep -q "$REGEX_AS"; then
 				filename="${line##'#>    AS '}"
 			else
 				echo "### $0: malformed line '$line' in '$1'"
 				exit 2
 			fi
-		elif [[ "$line" =~ $NIX_REGEX_FETCH ]]; then
+		elif echo "$line" | ../busybox grep -q $NIX_REGEX_FETCH; then
 		     hash=${BASH_REMATCH[1]}
-		elif [[ "$line" =~ $NIX_REGEX_FROM ]]; then
+		elif echo "$line" | ../busybox grep -q $NIX_REGEX_FROM; then
 		     url=${BASH_REMATCH[1]}
-		elif [[ "$line" =~ $NIX_REGEX_AS ]]; then
+		elif echo "$line" | ../busybox grep -q $NIX_REGEX_AS; then
 			filename=${BASH_REMATCH[1]}
 		else
-			if [[ -n "$hash" && -n "$url" ]]; then
-				filename=${filename:-$(basename $url)}
-				if [[ "$ONLY" == all || \
-						"$ONLY" == "$filename" ]]; then
+			if [ -n "$hash" ] && [ -n "$url" ]; then
+				filename=${filename:-$(../busybox basename $url)}
+				if [ "$ONLY" == all ] || [ "$ONLY" == "$filename" ]; then
 					fetch "$hash" "$url" "$filename"
 				fi
 			fi
@@ -79,7 +80,7 @@ process_commands_in() {
 	done < $1
 }
 
-[[ $# == 0 ]] && files='recipes/*.sh recipes/*/*.sh' || files="$@"
+[ $# == 0 ] && files='recipes/*.sh recipes/*/*.sh' || files="$@"
 for f in $files; do
 	process_commands_in $f
 done

@@ -1,16 +1,16 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
 #> FETCH f69eff1bc3d15d4e59011d587c57462a8d3d32cf2378d32d30d008a42a863325
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/gmp-4.3.2.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/gmp-4.3.2.tar.xz
 
 #> FETCH d7271bbfbc9ddf387d3919df8318cd7192c67b232919bfa1cb3202d07843da1b
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/mpfr-2.4.2.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mpfr-2.4.2.tar.xz
 
 #> FETCH e664603757251fd8a352848276497a4c79b7f8b21fd8aedd5cc0598a38fee3e4
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/mpc-0.8.1.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mpc-0.8.1.tar.gz
 
 #> FETCH 92e61c6dc3a0a449e62d72a38185fda550168a86702dea07125ebd3ec3996282
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/gcc-4.7.4.tar.bz2
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/gcc-4.7.4.tar.bz2
 
 set -uex
 

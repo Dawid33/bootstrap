@@ -1,7 +1,7 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
 #> FETCH 7a35eae33d5372a7c0da1188de798726f68825513b7ae3ebe97aaaa52114f039
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/musl-1.2.4.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/musl-1.2.4.tar.gz
 
 set -uex
 

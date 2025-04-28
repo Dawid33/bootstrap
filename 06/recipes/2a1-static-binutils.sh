@@ -1,7 +1,7 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
 #> FETCH 645c25f563b8adc0a81dbd6a41cffbf4d37083a382e02d5d3df4f65c09516d00
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/binutils-2.39.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/binutils-2.39.tar.xz
 
 set -uex
 

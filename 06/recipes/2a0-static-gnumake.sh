@@ -1,7 +1,7 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
 #> FETCH dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/make-4.4.1.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/make-4.4.1.tar.gz
 
 set -uex
 

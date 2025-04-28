@@ -8,9 +8,20 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v4
       - name: Setup chroot
-        run: su root && chroot $(pwd) /busybox ash
+        run: |
+          su root
+          mkdir -p 06/stage/dev/shm
+          mkdir -p etc
+          echo "nameserver 8.8.8.8"  > etc/resolv.conf
+          mknod 06/stage/dev/null c 1 3
+          chmod 666 06/stage/dev/null
+          chroot $(pwd) /busybox ash
       - name: Build tcc
         run: su root && chroot $(pwd) /busybox ash initboot.sh
-      - name: Build tcc, musl and busybox
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./06/ci_stage1.sh'
+
+      - name: Download tarballs and build proto-{tcc,musl,busybox}
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci_stage1.sh'
+
+      - name: Build static-gnumake
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a0-static-gnumake.sh'
             

@@ -1,7 +1,7 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
 # FETCH a02f4e8360dc6618bc494ca35b0ae21cea080f804a4898eab1ad3fcd108eb400
-#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/ccache-3.7.12.tar.xz
+#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/ccache-3.7.12.tar.xz
 
 set -uex
 

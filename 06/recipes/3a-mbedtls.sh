@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 # FETCH a420fcf7103e54e775c383e3751729b8fb2dcd087f6165befd13f28315f754f5
-#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/mbedtls-3.4.1.tar.gz
+#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mbedtls-3.4.1.tar.gz
 #    AS mbedtls-3.4.1.tar.gz
 
 set -uex

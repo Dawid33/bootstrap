@@ -1,13 +1,13 @@
 #!/store/2b2-busybox/bin/ash
 
 # FETCH bddacba2c4008d27d6beb486dc701f8e39d7ce073053749c4d2c56013b6d2999
-#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc-1.85.0-x86_64-unknown-linux-gnu.tar.gz
+#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc-1.85.0-x86_64-unknown-linux-gnu.tar.gz
 
 # FETCH b3ad21966023d24fac039385201dc4109a2f25e6f7a0a5b2a0910eccfdc0c4a9
-#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/rust-std-1.85.0-x86_64-unknown-linux-gnu.tar.gz
+#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/rust-std-1.85.0-x86_64-unknown-linux-gnu.tar.gz
 
 # FETCH e27ffcafa0c7a8eee305085155530974ba62edf5278548ba6de4e0674f55c372
-#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/cargo-1.85.0-x86_64-unknown-linux-gnu.tar.gz
+#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/cargo-1.85.0-x86_64-unknown-linux-gnu.tar.gz
 
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2a7-cmake/bin"

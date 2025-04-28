@@ -1,7 +1,7 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
 #> FETCH 795c34f44df45a0e9b9710c8c71c15c671871524cd412ca14def212e8ccb155d
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/Python-3.12.0.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/Python-3.12.0.tar.xz
 
 set -uex
 

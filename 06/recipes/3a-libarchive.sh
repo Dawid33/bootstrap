@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 # FETCH b17403ce670ff18d8e06fea05a9ea9accf70678c88f1b9392a2e29b51127895f
-#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/libarchive-3.7.1.tar.xz
+#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/libarchive-3.7.1.tar.xz
 
 set -uex
 

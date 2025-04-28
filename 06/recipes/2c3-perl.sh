@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH 10d4647cfbb543a7f9ae3e5f6851ec49305232ea7621aed24c7cfbb0bef4b70d
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/perl-5.40.2.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/perl-5.40.2.tar.gz
  
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b4-gnugcc13/bin"

@@ -9,26 +9,19 @@
 
 set -uex
 
-export NPROC=$(nproc --all)
+export NPROC=20
 
-cp ../05/tcc-final/tcc tcc-seed
-
-if [[ ! -e tcc-seed ]]; then
-	echo 'You need to supply a statically linked TinyCC as `tcc-seed`.'
-	echo -n 'You can `./compile-tcc-seed-with-nix.sh` '
-	echo 'if you have `nix` and trust in me.'
-	exit 1
-fi
+../busybox cp ../05/tcc-final/tcc tcc-seed
 
 # Create a stage directory
-mkdir -p stage
+../busybox mkdir -p stage
 
 # Download all the required source files
-./download.sh
+../busybox ash ./download.sh
 
 # Inject initial tcc and our scripts; pre-unpack and patch stage 1 sources,
 # in a separate file because it makes sense to run it separately sometimes.
-./seed.sh
+../busybox ash ./seed.sh
 
-/store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run /recipes/1-stage1.c
+../busybox chroot ./stage /store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run /recipes/1-stage1.c
 

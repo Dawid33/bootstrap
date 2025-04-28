@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 set -uex
 
-if [[ ! -e ./tcc-seed ]]; then
-	echo 'You need to supply a statically linked TinyCC as `tcc-seed`.'
-	echo -n 'You can `./compile-tcc-seed-with-nix.sh` '
-	echo 'if you have `nix` and trust in me.'
-	exit 1
-fi
+../busybox rm -rf stage/store
+../busybox rm -rf stage/tmp
+../busybox rm -rf stage/recipes
+../busybox rm -rf stage/downloads
 
-rm -rf stage
-mkdir -p stage/store
-cp -raL --reflink=auto downloads recipes stage/
+../busybox mkdir -p stage/store
+../busybox cp -raL --reflink=auto downloads recipes stage/
 
 # I'm too lazy to pass it through stage1
-sed -i "s|\$NPROC|$NPROC|" stage/recipes/*.sh
+../busybox sed -i "s|\$NPROC|$NPROC|" stage/recipes/*.sh
 
-DESTDIR=stage recipes/0-tcc-seed/seed.host-executed.sh  # copy tcc-seed
-DESTDIR=stage recipes/1-stage1/seed.host-executed.sh    # unpack stage1 sources
+../busybox cp ../05/tcc-final/tcc tcc-seed
+
+DESTDIR=stage ../busybox ash recipes/0-tcc-seed/seed.host-executed.sh  # copy tcc-seed
+DESTDIR=stage ../busybox ash recipes/1-stage1/seed.host-executed.sh    # unpack stage1 sources

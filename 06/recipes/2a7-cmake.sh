@@ -1,7 +1,7 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
 #> FETCH 0a905ca8635ca81aa152e123bdde7e54cbe764fdd9a70d62af44cad8b92967af
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/cmake-3.27.4.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/cmake-3.27.4.tar.gz
 
 set -uex
 

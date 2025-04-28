@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 # FETCH f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46
-#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/v1.0.9.tar.gz
+#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/v1.0.9.tar.gz
 #    AS brotli-1.0.9.tar.gz
 
 set -uex

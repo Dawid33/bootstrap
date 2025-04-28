@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH f5a71d05664340ae46cda9579c6079a0f2fa809d24386d284f0d091e4d576a4e
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/tinycc-mob-af1abf1.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/tinycc-mob-af1abf1.tar.gz
 #>    AS tinycc-mob-af1abf1.tar.gz
 
 set -uex
