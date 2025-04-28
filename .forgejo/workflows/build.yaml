@@ -24,4 +24,61 @@ jobs:
 
       - name: Build static-gnumake
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a0-static-gnumake.sh'
+
+      - name: Build 2a0-static-gnumake
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a0-static-gnumake.sh'
+
+      - name: Build 2a1-static-binutils.sh
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a1-static-binutils.sh'
+
+      - name: Build 2a2-static-gnugcc4-c.sh
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a2-static-gnugcc4-c.sh'
+      - name: Build 2a3-intermediate-musl
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a3-intermediate-musl.sh'
+      - name: Build 2a4-gnugcc4-cpp
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a4-gnugcc4-cpp.sh'
+      - name: Build 2a5-gnugcc10
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a5-gnugcc10.sh'
+      - name: Build 2a6-linux-headers
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a6-linux-headers.sh'
+      - name: Build 2a7-cmake
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a7-cmake.sh'
+      - name: Build 2a8-python
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a8-python.sh'
+      - name: Build 2a9-intermediate-clang
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a9-intermediate-clang.sh'
+      - name: Build 2b0-musl
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b0-musl.sh'
+      - name: Build 2b1-clang
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b1-clang.sh'
+      - name: Build 2b2-busybox
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b2-busybox.sh'
+      - name: Build 2b3-gnumake
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b3-gnumake.sh'
+      - name: Build 2b4-gnugcc13
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b4-gnugcc13.sh'
+      - name: Build 2b5-m4
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b5-m4.sh'
+      - name: Build 2b6-grep
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b6-grep.sh'
+      - name: Build 2b7-gawk
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b7-gawk.sh'
+      - name: Build 2b8-bison
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b8-bison.sh'
+      - name: Build 2b9-binutils
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b9-binutils.sh'
+      - name: Build 2c0-glibc
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c0-glibc.sh'
+      - name: Build 2c1-zlib
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-zlib.sh'
+      - name: Build 2c2-pkg-config
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c2-pkg-config.sh'
+      - name: Build 2c3-perl
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c3-perl.sh'
+      - name: Build 2c4-mrustc
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c4-mrustc.sh'
+      - name: Build 2c5-rust
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c5-rust.sh'
+      - name: Build 3b1-busybox-static
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/3b1-busybox-static.sh'
             
