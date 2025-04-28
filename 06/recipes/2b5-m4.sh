@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH 63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96
-#>  FROM https://mirror.ibcp.fr/pub/gnu/m4/m4-1.4.19.tar.xz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/m4-1.4.19.tar.xz
 
 set -uex
 

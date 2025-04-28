@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH 67be9198476cc37436e2801de649f4ad80bf0d02430d86aff63c6b59b6e23987
-#>  FROM https://mirrorservice.org/sites/sourceware.org/pub/binutils/releases/binutils-with-gold-2.44.tar.xz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/binutils-with-gold-2.44.tar.xz
 
 
 set -uex

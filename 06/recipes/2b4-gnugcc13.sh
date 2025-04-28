@@ -1,19 +1,19 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH 68dadacce515b0f8a54f510edf07c1b636492bcdb8e8d54c56eb216225d16989
-#>  FROM https://gmplib.org/download/gmp/gmp-6.1.0.tar.xz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/gmp-6.1.0.tar.xz
 
 #> FETCH 761413b16d749c53e2bfd2b1dfaa3b027b0e793e404b90b5fbaeef60af6517f5
-#>  FROM https://www.mpfr.org/mpfr-3.1.4/mpfr-3.1.4.tar.xz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/mpfr-3.1.4.tar.xz
 
 #> FETCH 617decc6ea09889fb08ede330917a00b16809b8db88c29c31bfbb49cbf88ecc3
-#>  FROM http://www.multiprecision.org/downloads/mpc-1.0.3.tar.gz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/mpc-1.0.3.tar.gz
 
 #> FETCH 6b8b0fd7f81d0a957beb3679c81bbb34ccc7568d5682844d8924424a0dadcb1b
-#>  FROM http://gcc.gnu.org/pub/gcc/infrastructure/isl-0.18.tar.bz2
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/isl-0.18.tar.bz2
 
 #> FETCH 0845e9621c9543a13f484e94584a49ffc0129970e9914624235fc1d061a0c083
-#>  FROM https://mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-13.3.0/gcc-13.3.0.tar.xz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/gcc-13.3.0.tar.xz
 
 set -uex
 

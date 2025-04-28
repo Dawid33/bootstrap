@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH f8c3486509de705192138b00ef2c00bbbdd0e84c30d5c07d23fc73a9dc4cc9cc
-#>  FROM https://mirror.ibcp.fr/pub/gnu/gawk/gawk-5.3.2.tar.xz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/gawk-5.3.2.tar.xz
 
 set -uex
 

@@ -1,7 +1,7 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
 #> FETCH cca91be956fe081f8f6da72034cded96fe35a50be4bfb7e103e354aa2159a674
-#>  FROM https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.4.12.tar.xz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/linux-6.4.12.tar.xz
 
 set -uex
 

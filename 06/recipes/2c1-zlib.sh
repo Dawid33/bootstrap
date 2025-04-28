@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH 9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23
-#>  FROM https://zlib.net/zlib-1.3.1.tar.gz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/zlib-1.3.1.tar.gz
  
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b4-gnugcc13/bin"

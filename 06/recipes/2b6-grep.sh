@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH 2649b27c0e90e632eadcd757be06c6e9a4f48d941de51e7c0f83ff76408a07b9
-#>  FROM https://mirror.ibcp.fr/pub/gnu/grep/grep-3.12.tar.xz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/grep-3.12.tar.xz
 
 set -uex
 

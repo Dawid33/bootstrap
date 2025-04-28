@@ -1,7 +1,7 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
 #> FETCH b0e42aafc01ece2ca2b42e3526f54bebc4b1f1dc8de6e34f46a0446a13e882b9
-#>  FROM https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/llvm-project-17.0.1.src.tar.xz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/llvm-project-17.0.1.src.tar.xz
 
 set -uex
 
