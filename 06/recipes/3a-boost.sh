@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH 6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e
-#>  FROM https://archives.boost.io/release/1.83.0/source/boost_1_83_0.tar.bz2
+# FETCH 6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e
+#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/boost_1_83_0.tar.bz2
 
 set -uex
 

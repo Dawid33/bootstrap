@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH dd322f6bd0a20e6cebdfd388f69e98c3d183bed792cf4713c8a7ef498cba4894
-#>  FROM https://curl.se/download/curl-8.2.1.tar.xz
+# FETCH dd322f6bd0a20e6cebdfd388f69e98c3d183bed792cf4713c8a7ef498cba4894
+#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/curl-8.2.1.tar.xz
 
 set -uex
 

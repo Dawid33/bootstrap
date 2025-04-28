@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH df223b3333a545fddbc67b49ded3d242c66fadf7a04beb3ada20957fcd1ffc0e
-#>  FROM https://github.com/troglobit/editline/releases/download/1.17.1/editline-1.17.1.tar.xz
+# FETCH df223b3333a545fddbc67b49ded3d242c66fadf7a04beb3ada20957fcd1ffc0e
+#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/editline-1.17.1.tar.xz
 
 set -uex
 

@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH 588546b945bba4b70b6a3a616e80b4ab466e3f33024a352fc2198112cdbb3ae2
-#>  FROM http://ftp.gnu.org/pub/gnu/gperf/gperf-3.1.tar.gz
+# FETCH 588546b945bba4b70b6a3a616e80b4ab466e3f33024a352fc2198112cdbb3ae2
+#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/gperf-3.1.tar.gz
 
 set -uex
 

@@ -1,8 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH 049b7883874f8a8e528dc7c4ed7b27cf7ceeb9ecf8fe71c3a8d51d574fddf84b
-#>  FROM https://github.com/kristapsdz/lowdown/archive/refs/tags/VERSION_1_0_2.tar.gz
-#>    AS lowdown-1.0.2.tar.gz
+# FETCH 049b7883874f8a8e528dc7c4ed7b27cf7ceeb9ecf8fe71c3a8d51d574fddf84b
+#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/lowdown-1.0.2.tar.gz
 
 set -uex
 

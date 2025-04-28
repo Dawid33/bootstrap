@@ -1,8 +1,8 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH 8c4b26bf4b422252e13f332bc5e388ec0ab5c3443d24399acb675e68278d341f
-#>  FROM https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
-#>    AS nlohmann-json-3.11.2.tar.xz
+# FETCH 8c4b26bf4b422252e13f332bc5e388ec0ab5c3443d24399acb675e68278d341f
+#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/v3.11.2/json.tar.xz
+#    AS nlohmann-json-3.11.2.tar.xz
 
 set -uex
 

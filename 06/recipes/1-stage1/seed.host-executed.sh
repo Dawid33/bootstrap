@@ -7,14 +7,14 @@
 # host's sed.
 
 #> FETCH 7a35eae33d5372a7c0da1188de798726f68825513b7ae3ebe97aaaa52114f039
-#>  FROM http://musl.libc.org/releases/musl-1.2.4.tar.gz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/musl-1.2.4.tar.gz
 
 #> FETCH f5a71d05664340ae46cda9579c6079a0f2fa809d24386d284f0d091e4d576a4e
-#>  FROM https://github.com/TinyCC/tinycc/archive/af1abf1f45d45b34f0b02437f559f4dfdba7d23c.tar.gz
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/tinycc-mob-af1abf1.tar.gz
 #>    AS tinycc-mob-af1abf1.tar.gz
 
 #> FETCH b8cc24c9574d809e7279c3be349795c5d5ceb6fdf19ca709f80cde50e47de314
-#>  FROM https://busybox.net/downloads/busybox-1.36.1.tar.bz2
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/busybox-1.36.1.tar.bz2
 
 set -ueo pipefail
 TGT="$DESTDIR/tmp/1-stage1"

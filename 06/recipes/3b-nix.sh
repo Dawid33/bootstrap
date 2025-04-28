@@ -1,10 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH f3f8016621cf3971e0768404f05b89d4a7fc1911dddae5a9a7ed4bf62519302c
-#>  FROM https://github.com/ZilchOS/nix/releases/download/nix-2.17.0-zilched/nix-2.17.0-zilched.tar.xz
-
-#> FETCH 3659cd137c320991a78413dd370a92fd18e0a8bc36d017d554f08677a37d7d5a
-#>  FROM https://raw.githubusercontent.com/somasis/musl-compat/c12ea3af4e6ee53158a175d992049c2148db5ff6/include/sys/queue.h
+# FETCH 3659cd137c320991a78413dd370a92fd18e0a8bc36d017d554f08677a37d7d5a
+#  FROM https://raw.githubusercontent.com/somasis/musl-compat/c12ea3af4e6ee53158a175d992049c2148db5ff6/include/sys/queue.h
 
 set -uex
 

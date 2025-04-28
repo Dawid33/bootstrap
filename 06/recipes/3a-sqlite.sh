@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH 49008dbf3afc04d4edc8ecfc34e4ead196973034293c997adad2f63f01762ae1
-#>  FROM https://sqlite.org/2023/sqlite-autoconf-3430000.tar.gz
+# FETCH 49008dbf3afc04d4edc8ecfc34e4ead196973034293c997adad2f63f01762ae1
+#  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/sqlite-autoconf-3430000.tar.gz
 
 set -uex
 
