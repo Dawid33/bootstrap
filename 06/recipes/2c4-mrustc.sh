@@ -4,10 +4,6 @@
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mrustc-0.11.2.tar.gz
 #>    AS mrustc-0.11.2.tar.gz
  
-#  FETCH 96f934d60d281948b515fee979f0fd2cde4ef83afd9881ed0469245814c868e7
-#   FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc_bootstrapped-v1.74.tar.gz
-#     AS rustc_bootstrapped-v1.74.tar.gz
-
 #> FETCH 882b584bc321c5dcfe77cdaa69f277906b936255ef7808fcd5c7492925cf1049
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/rustc-1.74.0-src.tar.gz
 #>    AS rustc-1.74.0-src.tar.gz

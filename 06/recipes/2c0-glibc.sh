@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-# FETCH a5a26b22f545d6b7d7b3dd828e11e428f24f4fac43c934fb071b6a7d0828e901
-#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/glibc-2.41.tar.xz
+#> FETCH a5a26b22f545d6b7d7b3dd828e11e428f24f4fac43c934fb071b6a7d0828e901
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/glibc-2.41.tar.xz
  
 set -uex
 

@@ -42,7 +42,8 @@ MKDIR=$(command -v mkdir)
 CHROOT=$(command -v chroot)
 
 exec env -i "NPROC=$NPROC" unshare -nrm bash -uexs <<EOF
-	$MKDIR stage/dev; :> stage/dev/null
+	$MKDIR -p stage/dev/shm;
+	:> stage/dev/null
 	$MOUNT --bind /dev/null stage/dev/null
   $MOUNT -t tmpfs /dev/shm stage/dev/shm
 

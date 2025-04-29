@@ -33,4 +33,4 @@ TESTING=2c4-mrustc
 # cd 06;
 # ../busybox ash ./ci_stage1.sh 2>&1 | less +F
 
-./busybox ash ./initboot.sh 2>&1 | less +F
+# ./busybox ash ./initboot.sh 2>&1 | less +F
