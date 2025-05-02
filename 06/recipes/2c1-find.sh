@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH a2bfb8c09d436770edc59f50fa483e785b161a3b7b9d547573cb08065fd462fe
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/findutils-4.9.0.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/findutils-4.9.0.tar.xz
 
 set -uex
 

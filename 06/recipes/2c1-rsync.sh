@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH 7dbda2c6b863cd309ffda85c19f0e8754e5cec049b6f860783f8a0ad20c1a503
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/rsync-3.4.1.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/rsync-3.4.1.tar.gz
 
 set -uex
 

@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH e8bb26ad0293f9b5a1fc43fb42ba970e312c66ce92c1b0b16713d7500db251bf
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/coreutils-9.7.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/coreutils-9.7.tar.xz
 set -uex
 
 export PATH='/store/2b2-busybox/bin'

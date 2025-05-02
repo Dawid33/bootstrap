@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH f87cee69eec2b4fcbf60a396b030ad6aa3415f192aa5f7ee84cad5e11f7f5ae3
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/patch-2.8.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/patch-2.8.tar.xz
 
 set -uex
 

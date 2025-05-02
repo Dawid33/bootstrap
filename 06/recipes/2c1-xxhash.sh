@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/xxhash-0.8.3.tar.gz 
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/xxhash-0.8.3.tar.gz 
  
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b4-gnugcc13/bin"
