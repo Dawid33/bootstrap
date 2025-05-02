@@ -4,6 +4,7 @@ set -uex
 
 export SOURCE_DATE_EPOCH=0
 
+# Setup toolchain for building... the toolchain
 /recipes/2a0-static-gnumake.sh
 /recipes/2a1-static-binutils.sh
 /recipes/2a2-static-gnugcc4-c.sh
@@ -23,12 +24,30 @@ export SOURCE_DATE_EPOCH=0
 /recipes/2b6-grep.sh
 /recipes/2b7-gawk.sh
 /recipes/2b8-bison.sh
-/recipes/2b9-binutils.sh
-/recipes/2c0-glibc.sh
-/recipes/2c1-zlib.sh
-/recipes/2c2-pkg-config.sh
 /recipes/2c3-perl.sh
-/recipes/2c4-mrustc.sh
-/recipes/2c5-rust.sh
+/recipes/2c4-autoconf.sh
+/recipes/2c4-automake.sh
+/recipes/2c0-libtool.sh
+/recipes/2c1-coreutils.sh
+/recipes/2b10-bash.sh
+/recipes/2c1-patch.sh
+/recipes/2c1-find.sh
+/recipes/2c1-zstd.sh
+/recipes/2c1-rsync.sh
+/recipes/2b11-file.sh
+/recipes/2c1-gettext.sh
+/recipes/2b9-flex.sh
+# TESTING=2c2-pkg-config
+# TESTING=2c4-automake
+# TESTING=2c4-autoconf
+# TESTING=2c4-patchelf
+# TESTING=2c4-mrustc
+# TESTING=2c1-zlib
+# TESTING=2a8-python
+# TESTING=2c3-perl
+# TESTING=2c0-libtool
+# TESTING=2c1-gettext
+# TESTING=2b10-bash
+# TESTING=2b11-file
+# TESTING=2c1-buildroot
 
-/recipes/3b1-busybox-static.sh

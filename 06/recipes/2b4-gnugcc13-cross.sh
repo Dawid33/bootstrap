@@ -19,19 +19,16 @@ set -uex
 
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b3-gnumake/bin"
-export PATH="$PATH:/store/2b1-clang/bin"
+export PATH="$PATH:/store/2b4-gnugcc13/bin"
+export PATH="$PATH:/store/2c3-perl/bin"
 export PATH="$PATH:/store/2a1-static-binutils/bin"
 
-rm -rf /tmp/2b4-gnugcc13
-rm -rf /store/2b4-gnugcc13
-mkdir -p /tmp/2b4-gnugcc13; cd /tmp/2b4-gnugcc13
+mkdir -p /tmp/2b4-gnugcc13-cross; cd /tmp/2b4-gnugcc13-cross
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
 echo "### $0: aliasing ash to sh..."
 mkdir aliases; ln -s /store/2b2-busybox/bin/ash aliases/sh
-export PATH="/tmp/2b4-gnugcc13/aliases:$PATH"
-
-SYSROOT=/store/2b0-musl
+export PATH="/tmp/2b4-gnugcc13-cross/aliases:$PATH"
 
 echo "### $0: unpacking GNU GCC 13 sources..."
 mkdir gmp mpfr mpc isl
@@ -49,45 +46,46 @@ sed -i 's|^\(\s*\)sh |\1/store/2b2-busybox/bin/ash |' \
 	libgcc/Makefile.in
 sed -i 's|LIBGCC2_DEBUG_CFLAGS = -g|LIBGCC2_DEBUG_CFLAGS = |' \
 	libgcc/Makefile.in
-sed -i "s|/lib/ld-musl-x86_64.so.1|$SYSROOT/lib/libc.so|" \
-	gcc/config/i386/linux64.h
 sed -i 's|m64=../lib64|m64=../lib|' gcc/config/i386/t-linux64
-sed -i 's|"os/gnu-linux"|"os/generic"|' libstdc++-v3/configure.host
 # see libtool's 74c8993c178a1386ea5e2363a01d919738402f30
 sed -i 's/| \$NL2SP/| sort | $NL2SP/' ltmain.sh */ltmain.sh
 
 echo "### $0: building GNU GCC 13"
-export LIBRARY_PATH="/store/2b1-clang/lib"
-export LD_LIBRARY_PATH="/store/2b1-clang/lib"
-ash configure \
+
+mkdir build; cd build
+ash ../configure \
 	CONFIG_SHELL='/store/2b2-busybox/bin/ash' \
 	SHELL='/store/2b2-busybox/bin/ash' \
-	CFLAGS=-O2 CXX_FLAGS=-O2 \
-	CFLAGS_FOR_TARGET=-O2 CXXFLAGS_FOR_TARGET=-O2 \
-	--with-sysroot=$SYSROOT \
-	--with-native-system-header-dir=/include \
-	--with-build-time-tools=/store/2a1-static-binutils/bin \
-	--prefix=/store/2b4-gnugcc13 \
-	--with-specs='%{!static:%x{-rpath=/store/2b4-gnugcc13/lib}}' \
-	--enable-languages=c,c++ \
+	--target=x86_64-linux-gnu         \
+	--prefix=/store/2b4-gnugcc13-cross        \
+	--with-glibc-version=2.41 \
+	--with-sysroot=/store/2b4-gnugcc13-cross        \
+	--with-newlib             \
+	--without-headers         \
+	--enable-default-pie      \
+	--enable-default-ssp      \
+	--disable-nls             \
+	--disable-shared          \
+	--disable-multilib        \
+	--disable-threads         \
+	--disable-libatomic       \
+	--disable-libgomp         \
+	--disable-libquadmath     \
+	--disable-libssp          \
+	--disable-libvtv          \
+	--disable-libstdcxx       \
 	--disable-libquadmath --disable-decimal-float --disable-fixed-point \
 	--disable-lto \
 	--disable-libgomp \
-	--disable-multilib \
 	--disable-multiarch \
 	--disable-libmudflap \
-	--disable-libssp \
 	--disable-nls \
-	--disable-libitm \
-	--disable-libsanitizer \
-	--disable-cet \
-	--disable-gnu-unique-object \
-	--disable-gcov \
-	--disable-checking \
-	--host x86_64-linux-musl --build x86_64-linux-musl
+	--host x86_64-linux --build x86_64-linux \
+	--enable-languages=c,c++
+
 make -j $NPROC
 echo "### $0: installing GNU GCC 13"
 make -j $NPROC install-strip
 
 echo "### $0: checking for build path leaks..."
-( ! grep -rF /tmp/2a5 /store/2b4-gnugcc13 )
+( ! grep -rF /tmp/2a5 /store/2b4-gnugcc13-cross )

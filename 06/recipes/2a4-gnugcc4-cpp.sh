@@ -1,4 +1,4 @@
-#!/store/1-stage1/protobusybox/bin/ash
+!/store/1-stage1/protobusybox/bin/ash
 
 #> FETCH f69eff1bc3d15d4e59011d587c57462a8d3d32cf2378d32d30d008a42a863325
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/gmp-4.3.2.tar.xz

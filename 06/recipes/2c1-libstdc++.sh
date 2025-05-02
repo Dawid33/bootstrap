@@ -19,27 +19,23 @@ set -uex
 
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b3-gnumake/bin"
-export PATH="$PATH:/store/2b1-clang/bin"
-export PATH="$PATH:/store/2a1-static-binutils/bin"
+export PATH="$PATH:/store/2b7-gawk/bin"
+export PATH="$PATH:/store/2b4-gnugcc13-cross/bin"
+export PATH="$PATH:/store/2c3-perl/bin"
+export PATH="$PATH:/store/2b9-binutils/bin"
 
-rm -rf /tmp/2b4-gnugcc13
-rm -rf /store/2b4-gnugcc13
-mkdir -p /tmp/2b4-gnugcc13; cd /tmp/2b4-gnugcc13
+rm -rf /tmp/2c1-libstdc++
+rm -rf /store/2c1-libstdc++
+mkdir -p /tmp/2c1-libstdc++; cd /tmp/2c1-libstdc++
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
 echo "### $0: aliasing ash to sh..."
 mkdir aliases; ln -s /store/2b2-busybox/bin/ash aliases/sh
-export PATH="/tmp/2b4-gnugcc13/aliases:$PATH"
-
-SYSROOT=/store/2b0-musl
+export PATH="/tmp/2c1-libstdc++/aliases:$PATH"
 
 echo "### $0: unpacking GNU GCC 13 sources..."
 mkdir gmp mpfr mpc isl
 tar --strip-components=1 -xf /downloads/gcc-13.3.0.tar.xz
-tar --strip-components=1 -xf /downloads/gmp-6.1.0.tar.xz -C gmp
-tar --strip-components=1 -xf /downloads/mpfr-3.1.4.tar.xz -C mpfr
-tar --strip-components=1 -xf /downloads/mpc-1.0.3.tar.gz -C mpc
-tar --strip-components=1 -xf /downloads/isl-0.18.tar.bz2 -C isl
 
 echo "### $0: fixing up GNU GCC 13 sources..."
 sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' \
@@ -49,45 +45,25 @@ sed -i 's|^\(\s*\)sh |\1/store/2b2-busybox/bin/ash |' \
 	libgcc/Makefile.in
 sed -i 's|LIBGCC2_DEBUG_CFLAGS = -g|LIBGCC2_DEBUG_CFLAGS = |' \
 	libgcc/Makefile.in
-sed -i "s|/lib/ld-musl-x86_64.so.1|$SYSROOT/lib/libc.so|" \
-	gcc/config/i386/linux64.h
 sed -i 's|m64=../lib64|m64=../lib|' gcc/config/i386/t-linux64
-sed -i 's|"os/gnu-linux"|"os/generic"|' libstdc++-v3/configure.host
 # see libtool's 74c8993c178a1386ea5e2363a01d919738402f30
 sed -i 's/| \$NL2SP/| sort | $NL2SP/' ltmain.sh */ltmain.sh
 
 echo "### $0: building GNU GCC 13"
-export LIBRARY_PATH="/store/2b1-clang/lib"
-export LD_LIBRARY_PATH="/store/2b1-clang/lib"
-ash configure \
+mkdir build; cd build
+ash ../libstdc++-v3/configure \
 	CONFIG_SHELL='/store/2b2-busybox/bin/ash' \
 	SHELL='/store/2b2-busybox/bin/ash' \
-	CFLAGS=-O2 CXX_FLAGS=-O2 \
-	CFLAGS_FOR_TARGET=-O2 CXXFLAGS_FOR_TARGET=-O2 \
-	--with-sysroot=$SYSROOT \
-	--with-native-system-header-dir=/include \
-	--with-build-time-tools=/store/2a1-static-binutils/bin \
-	--prefix=/store/2b4-gnugcc13 \
-	--with-specs='%{!static:%x{-rpath=/store/2b4-gnugcc13/lib}}' \
-	--enable-languages=c,c++ \
-	--disable-libquadmath --disable-decimal-float --disable-fixed-point \
-	--disable-lto \
-	--disable-libgomp \
-	--disable-multilib \
-	--disable-multiarch \
-	--disable-libmudflap \
-	--disable-libssp \
-	--disable-nls \
-	--disable-libitm \
-	--disable-libsanitizer \
-	--disable-cet \
-	--disable-gnu-unique-object \
-	--disable-gcov \
-	--disable-checking \
-	--host x86_64-linux-musl --build x86_64-linux-musl
+  --prefix=/store/2b4-gnugcc13-cross  \
+  --disable-multilib              \
+  --disable-nls                   \
+  --disable-libstdcxx-pch         \
+  --with-gxx-include-dir=/store/2b4-gnugcc13-cross/x86_64-linux-gnu/include/c++/13.3.0 \
+  --host=x86_64-linux-gnu \
+  --build=x86_64-linux-gnu
 make -j $NPROC
 echo "### $0: installing GNU GCC 13"
 make -j $NPROC install-strip
 
 echo "### $0: checking for build path leaks..."
-( ! grep -rF /tmp/2a5 /store/2b4-gnugcc13 )
+( ! grep -rF /tmp/2a5 /store/2c1-libstdc++ )

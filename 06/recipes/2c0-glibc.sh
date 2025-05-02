@@ -10,10 +10,11 @@ export PATH="$PATH:/store/2b7-gawk/bin"
 export PATH="$PATH:/store/2b8-bison/bin"
 export PATH="$PATH:/store/2b3-gnumake/bin"
 export PATH="$PATH:/store/2b4-gnugcc13/bin"
-export PATH="$PATH:/store/2b9-binutils/bin"
+export PATH="$PATH:/store/2a1-static-binutils/bin"
 export PATH="$PATH:/store/2a8-python/bin"
 
 rm -rf /tmp/2c0-glibc
+rm -rf /store/2c0-glibc
 mkdir -p /tmp/2c0-glibc; cd /tmp/2c0-glibc
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
@@ -30,12 +31,14 @@ echo "### $0: building GNU GLIBC 13"
 
 sed -i 's|/bin/pwd|/store/2b2-busybox/bin/pwd|' configure
 mkdir build && cd build;
+
 ash ../configure \
 	CONFIG_SHELL='/store/2b2-busybox/bin/ash' \
 	SHELL='/store/2b2-busybox/bin/ash' \
 	CFLAGS='-Wno-error=attribute-alias -O2' \
 	--prefix=/store/2c0-glibc \
-	--with-headers='/store/2a6-linux-headers/include' 
+	--disable-nscd \
+	--with-headers='/store/2a6-linux-headers/include'
 
 # TODO: find where /bin/sh is used
 mkdir -p /bin

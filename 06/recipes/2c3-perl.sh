@@ -5,7 +5,7 @@
  
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b4-gnugcc13/bin"
-export PATH="$PATH:/store/2b9-binutils/bin"
+export PATH="$PATH:/store/2a1-static-binutils/bin"
 export PATH="$PATH:/store/2b3-gnumake/wrappers"
 export SHELL=/store/2b2-busybox/bin/ash
 

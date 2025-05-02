@@ -9,7 +9,7 @@
 
 set -uex
 
-export NPROC=20
+export NPROC=10
 
 ../busybox cp ../05/tcc-final/tcc tcc-seed
 

@@ -10,6 +10,9 @@ export PATH="$PATH:/store/2a0-static-gnumake/bin"
 export PATH="$PATH:/store/2a1-static-binutils/bin"
 export PATH="$PATH:/store/2a9-intermediate-clang/bin/generic-names"
 
+rm -rf /tmp/2b0-musl; 
+rm -rf /store/2b0-musl; 
+
 mkdir -p /tmp/2b0-musl; cd /tmp/2b0-musl
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 

@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH 9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23
-#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/zlib-1.3.1.tar.gz
+#> FETCH aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/xxhash-0.8.3.tar.gz 
  
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b4-gnugcc13/bin"
@@ -10,18 +10,21 @@ export PATH="$PATH:/store/2a1-static-binutils/bin"
 export PATH="$PATH:/store/2b3-gnumake/wrappers"
 export SHELL=/store/2b2-busybox/bin/ash
 
-rm -rf /tmp/2c1-zlib
-rm -rf /store/2c1-zlib
-mkdir -p /tmp/2c1-zlib; cd /tmp/2c1-zlib
+rm -rf /tmp/2c1-xxhash
+rm -rf /store/2c1-xxhash
+mkdir -p /tmp/2c1-xxhash; cd /tmp/2c1-xxhash
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
 echo "### $0: unpacking zlib sources..."
-tar --strip-components=1 -xf /downloads/zlib-1.3.1.tar.gz
+tar --strip-components=1 -xf /downloads/xxhash-0.8.3.tar.gz 
 
 echo "### $0: building zlib..."
-mkdir -p /store/2c1-zlib
-cmake -DCMAKE_INSTALL_PREFIX=/store/2c1-zlib -B build;
-cd build; make install
+mkdir -p /store/2c1-xxhash
+
+export CC=gcc
+export PREFIX=/store/2c1-xxhash 
+make -j $NPROC all
+make install
 
 
 
