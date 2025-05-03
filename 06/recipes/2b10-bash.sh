@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH 
-#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/bash-5.2.9.tar.gz
+#> FETCH 0cfb5c9bb1a29f800a97bd242d19511c997a1013815b805e0fdd32214113d6be
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/bash-5.1.8.tar.gz
 
 set -uex
 

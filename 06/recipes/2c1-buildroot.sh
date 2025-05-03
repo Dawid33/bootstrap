@@ -74,9 +74,13 @@
  
 #> FETCH 38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/zlib-1.3.1.tar.xz
+
+#> FETCH 09418a6d8fb83f5113f5bd856e09703df5d37bae0308c668d0f346e3d3f0a56f
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/lzip-1.25.tar.gz 
 set -uex
 
 export PATH="/store/2b2-busybox/bin"
+export PATH="$PATH:/store/2c1-tar/bin"
 export PATH="$PATH:/store/2b6-grep/bin"
 export PATH="$PATH:/store/2c1-coreutils/bin"
 export PATH="$PATH:/store/2b3-gnumake/bin"
@@ -95,12 +99,6 @@ rm -rf /store/2c1-buildroot
 mkdir -p /tmp/2c1-buildroot; cd /tmp/2c1-buildroot
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
-# export LD_LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib:/store/2b4-gnugcc13/lib"
-# rsync --fake-super -rlptgoD --ignore-times --exclude .svn --exclude .git --exclude .hg \
-#     --exclude .bz --exclude CVS --chmod=u=rwX,go=rX --exclude .empty \
-#     --exclude '*~' system/skeleton/ /tmp/2c1-buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/
-# exit
- 
 mkdir -p aliases;
 ln -sf /store/2c1-patch/bin/patch aliases/patch
 ln -sf /store/2c1-find/bin/find aliases/find
@@ -109,8 +107,30 @@ export PATH="/tmp/2c1-buildroot/aliases:$PATH"
 echo "### $0: unpacking buildroot sources..."
 tar --strip-components=1 -xf /downloads/buildroot-2025.02.tar.xz
 
+# Add patch to make fakeroot work with musl
+# https://codeberg.org/aparcar/openwrt/src/branch/nourngd/tools/fakeroot/patches/400-alpine-libc.musl-fix.patch
+cat <<'EOF' > package/fakeroot/0002-alpine-libc.musl-fix.patch 
+--- a/libfakeroot.c
++++ b/libfakeroot.c
+@@ -86,12 +86,14 @@
+ #define SEND_STAT64(a,b,c) send_stat64(a,b,c)
+ #define SEND_GET_STAT(a,b) send_get_stat(a,b)
+ #define SEND_GET_STAT64(a,b) send_get_stat64(a,b)
++#define SEND_GET_XATTR(a,b,c) send_get_xattr(a,b,c)
+ #define SEND_GET_XATTR64(a,b,c) send_get_xattr64(a,b,c)
+ #else
+ #define SEND_STAT(a,b,c) send_stat(a,b)
+ #define SEND_STAT64(a,b,c) send_stat64(a,b)
+ #define SEND_GET_STAT(a,b) send_get_stat(a)
+ #define SEND_GET_STAT64(a,b) send_get_stat64(a)
++#define SEND_GET_XATTR(a,b,c) send_get_xattr(a,b)
+ #define SEND_GET_XATTR64(a,b,c) send_get_xattr64(a,b)
+ #endif
+ 
+EOF
+
 mkdir -p dl; cd dl;
-mkdir -p fakeroot tar glibc mpc acl gcc automake libtool m4 binutils attr mpfr linux autoconf bison gawk gmp busybox patchelf make gettext-tiny pkgconf libzlib
+mkdir -p fakeroot tar glibc mpc acl gcc automake libtool m4 binutils attr mpfr linux autoconf bison gawk gmp busybox patchelf make gettext-tiny pkgconf libzlib lzip
 cd ..
 cp /downloads/fakeroot_1.36.orig.tar.gz dl/fakeroot/fakeroot_1.36.orig.tar.gz
 cp /downloads/tar-1.35.cpio.gz dl/tar/tar-1.35.cpio.gz
@@ -135,6 +155,7 @@ cp /downloads/make-4.4.1.tar.lz dl/make/make-4.4.1.tar.lz
 cp /downloads/gettext-tiny-0.3.2.tar.gz dl/gettext-tiny/gettext-tiny-0.3.2.tar.gz
 cp /downloads/pkgconf-2.3.0.tar.xz dl/pkgconf/pkgconf-2.3.0.tar.xz
 cp /downloads/zlib-1.3.1.tar.xz dl/libzlib/zlib-1.3.1.tar.xz
+cp /downloads/lzip-1.25.tar.gz  dl/lzip/lzip-1.25.tar.gz 
 cp /recipes/buildroot.config .config
 sed -i 's|-a|--fake-super -a|g' system/system.mk
 sed -i 's|-auH|--fake-super -auH|g' fs/common.mk

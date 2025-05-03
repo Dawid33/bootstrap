@@ -37,6 +37,7 @@ export SOURCE_DATE_EPOCH=0
 /recipes/2c1-xxhash.sh
 /recipes/2c1-rsync.sh
 /recipes/2b11-file.sh
+# /recipes/2c1-tar.sh
 /recipes/2c1-buildroot.sh
 # /recipes/2c2-pkg-config.sh
 # /recipes/2c1-zlib.sh
