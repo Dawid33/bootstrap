@@ -76,12 +76,11 @@
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/zlib-1.3.1.tar.xz
 
 #> FETCH 09418a6d8fb83f5113f5bd856e09703df5d37bae0308c668d0f346e3d3f0a56f
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/lzip-1.25.tar.gz 
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/lzip-1.25.tar.gz 
 set -uex
 
-export PATH="/store/2b2-busybox/bin"
-export PATH="$PATH:/store/2c1-tar/bin"
-export PATH="$PATH:/store/2b6-grep/bin"
+export PATH="/store/2b6-grep/bin"
+export PATH="$PATH:/store/2b2-busybox/bin"
 export PATH="$PATH:/store/2c1-coreutils/bin"
 export PATH="$PATH:/store/2b3-gnumake/bin"
 export PATH="$PATH:/store/2b10-bash/bin"
@@ -157,8 +156,14 @@ cp /downloads/pkgconf-2.3.0.tar.xz dl/pkgconf/pkgconf-2.3.0.tar.xz
 cp /downloads/zlib-1.3.1.tar.xz dl/libzlib/zlib-1.3.1.tar.xz
 cp /downloads/lzip-1.25.tar.gz  dl/lzip/lzip-1.25.tar.gz 
 cp /recipes/buildroot.config .config
+
 sed -i 's|-a|--fake-super -a|g' system/system.mk
 sed -i 's|-auH|--fake-super -auH|g' fs/common.mk
+# TODO: possibly fix this for reproducibility, it breaks because busybox tar doesn't have this option
+sed -i 's|TAR_OPTS += --pax-option=exthdr.name=%d/PaxHeaders/%f,atime:=0,ctime:=0||g' fs/tar/tar.mk
+sed -i 's|--null||g' fs/tar/tar.mk
+sed -i "s|--xattrs-include='\*'||g" fs/tar/tar.mk
+
 
 export LD_LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib:/store/2b4-gnugcc13/lib"
 mkdir -p /bin
@@ -171,7 +176,7 @@ ln -fs /store/2c1-patch/bin/patch /usr/bin/patch
 ln -fs /store/2b2-busybox/bin/env /usr/bin/env
 make -j $NPROC
 echo "### $0: installing buildroot"
-make -j $NPROC install-strip
+make install
 rm -rf /bin
 rm -rf /usr
 
