@@ -58,13 +58,14 @@
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/acl-2.3.2.tar.xz
  
 #> FETCH 4c7ed4bcfc1a114d6286e4a0d3c1a90db147a4c3adda1814ee0eee0f9ee917ed
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/patchelf-0.13.tar.bz2
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/patchelf-0.13.tar.bz2
  
 #> FETCH 3311dff32e746499f4df0d5df04d7eb396382d7e108bb9250e7b519b837043a4
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/busybox-1.37.0.tar.bz2
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/busybox-1.37.0.tar.bz2
 set -uex
 
 export PATH="/store/2c1-coreutils/bin"
+export PATH="$PATH:/store/2b6-grep/bin"
 export PATH="$PATH:/store/2b2-busybox/bin"
 export PATH="$PATH:/store/2b3-gnumake/bin"
 export PATH="$PATH:/store/2b10-bash/bin"
