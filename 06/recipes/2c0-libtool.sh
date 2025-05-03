@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH da8ebb2ce4dcf46b90098daf962cffa68f4b4f62ea60f798d0ef12929ede6adf   
-#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/libtool-2.4.5.tar.gz
+#> FETCH 84aac136513b009278896ffa255e4d685bcdb0cb0e5363be36adad64c986177e
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/libtool-2.4.5.tar.xz
 
 set -uex
 
