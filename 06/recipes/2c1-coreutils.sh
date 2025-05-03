@@ -29,8 +29,8 @@ FORCE_UNSAFE_CONFIGURE=1 ash configure \
 	CONFIG_SHELL='/store/2b2-busybox/bin/ash' \
 	SHELL='/store/2b2-busybox/bin/ash' \
 	--prefix=/store/2c1-coreutils
-# sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' \
-# 	./build-aux/install-sh po/Makefile
+sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' \
+	./build-aux/install-sh po/Makefile
 make -j $NPROC
 echo "### $0: installing GNU GAWK"
 make -j $NPROC install-strip

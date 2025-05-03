@@ -27,13 +27,13 @@
 # TESTING=2c0-libtool
 # TESTING=2c1-gettext
 # TESTING=2b11-file
-TESTING=2b9-flex
+# TESTING=2b9-flex
 # TESTING=2c1-coreutils
 # TESTING=2c1-zlib
 # TESTING=2c1-zstd
 # TESTING=2c1-xxhash
 # TESTING=2c1-rsync
-# TESTING=2c1-buildroot
+TESTING=2c1-buildroot
 # TESTING=2c1-find
 # TESTING=2c1-patch
 # TESTING=2b0-musl

@@ -27,20 +27,17 @@ echo "### $0: aliasing ash to sh..."
 echo "### $0: unpacking GNU GAWK sources..."
 tar --strip-components=1 -xf /downloads/rsync-3.4.1.tar.gz
 
-# export LIBRARY_PATH="/store/2c1-zstd/lib"
-# export CPATH="/store/2c1-zstd/include"
-
 echo "### $0: building GNU GAWK"
+export LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib"
+export LD_LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib"
+export CPATH="/store/2a6-linux-headers/include:/store/2c1-xxhash/include:/store/2c1-zstd/include:/store/2b0-musl/include"
 export CC=gcc
 ash configure \
 	CONFIG_SHELL='/store/2b2-busybox/bin/ash' \
 	SHELL='/store/2b2-busybox/bin/ash' \
-	CPPFLAGS="-I /store/2c1-zstd/include" \
-	LDFLAGS="-L /store/2c1-zstd/lib" \
 	--disable-md2man \
 	--disable-openssl \
 	--disable-lz4 \
-	--disable-xxhash \
 	--prefix=/store/2c1-rsync
 
 make -j $NPROC

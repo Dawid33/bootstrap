@@ -40,7 +40,6 @@ autoconf
 ash ./configure \
 	--prefix=/store/2b11-file
 
-# export LD_LIBRARY_PATH="/store/2c0-libtool/lib"
 make -j $NPROC
 echo "### $0: installing file"
 make -j $NPROC install-strip

@@ -56,7 +56,12 @@
  
 #> FETCH 97203a72cae99ab89a067fe2210c1cbf052bc492b479eca7d226d9830883b0bd
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/acl-2.3.2.tar.xz
-
+ 
+#> FETCH 4c7ed4bcfc1a114d6286e4a0d3c1a90db147a4c3adda1814ee0eee0f9ee917ed
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/patchelf-0.13.tar.bz2
+ 
+#> FETCH 3311dff32e746499f4df0d5df04d7eb396382d7e108bb9250e7b519b837043a4
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/busybox-1.37.0.tar.bz2
 set -uex
 
 export PATH="/store/2c1-coreutils/bin"
@@ -86,7 +91,7 @@ echo "### $0: unpacking buildroot sources..."
 tar --strip-components=1 -xf /downloads/buildroot-2025.02.tar.xz
 
 mkdir dl; cd dl;
-mkdir fakeroot tar glibc mpc acl gcc automake libtool m4 binutils attr mpfr linux autoconf bison gawk gmp
+mkdir fakeroot tar glibc mpc acl gcc automake libtool m4 binutils attr mpfr linux autoconf bison gawk gmp busybox patchelf
 cd ..
 cp /downloads/fakeroot_1.36.orig.tar.gz dl/fakeroot/fakeroot_1.36.orig.tar.gz
 cp /downloads/tar-1.35.cpio.gz dl/tar/tar-1.35.cpio.gz
@@ -105,8 +110,12 @@ cp /downloads/autoconf-2.72.tar.xz dl/autoconf/autoconf-2.72.tar.xz
 cp /downloads/bison-3.8.2.tar.xz dl/bison/bison-3.8.2.tar.xz
 cp /downloads/gawk-5.3.1.tar.xz dl/gawk/gawk-5.3.1.tar.xz
 cp /downloads/gmp-6.3.0.tar.xz dl/gmp/gmp-6.3.0.tar.xz
+cp /downloads/busybox-1.37.0.tar.bz2 dl/busybox/busybox-1.37.0.tar.bz2
+cp /downloads/patchelf-0.13.tar.bz2 dl/patchelf/patchelf-0.13.tar.bz2
 cp /recipes/buildroot.config .config
+sed -i 's|-a|-rltvz|g' system/system.mk
 
+export LD_LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib"
 mkdir -p /bin
 mkdir -p /usr/bin
 ln -fs /store/2b2-busybox/bin/ash /bin/sh
