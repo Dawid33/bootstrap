@@ -62,6 +62,18 @@
  
 #> FETCH 3311dff32e746499f4df0d5df04d7eb396382d7e108bb9250e7b519b837043a4
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/busybox-1.37.0.tar.bz2
+
+#> FETCH 8814ba072182b605d156d7589c19a43b89fc58ea479b9355146160946f8cf6e9
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/make-4.4.1.tar.lz
+ 
+#> FETCH 29cc165e27e83d2bb3760118c2368eadab550830d962d758e51bd36eb860f383
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/gettext-tiny-0.3.2.tar.gz
+ 
+#> FETCH 3a9080ac51d03615e7c1910a0a2a8df08424892b5f13b0628a204d3fcce0ea8b
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/pkgconf-2.3.0.tar.xz
+ 
+#> FETCH 38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32
+#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/zlib-1.3.1.tar.xz
 set -uex
 
 export PATH="/store/2c1-coreutils/bin"
@@ -83,16 +95,24 @@ rm -rf /store/2c1-buildroot
 mkdir -p /tmp/2c1-buildroot; cd /tmp/2c1-buildroot
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
+export LD_LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib:/store/2b4-gnugcc13/lib"
+# ls -la system/skeleton/
+# ls -la /tmp/2c1-buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/
+# rsync -rlptgoD --ignore-times --exclude .svn --exclude .git --exclude .hg \
+#     --exclude .bz --exclude CVS --chmod=u=rwX,go=rX --exclude .empty \
+#     --exclude '*~' system/skeleton/ /tmp/2c1-buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/
+# exit
+ 
 mkdir -p aliases;
-ln -s /store/2c1-patch/bin/patch aliases/patch
-ln -s /store/2c1-find/bin/find aliases/find
+ln -sf /store/2c1-patch/bin/patch aliases/patch
+ln -sf /store/2c1-find/bin/find aliases/find
 export PATH="/tmp/2c1-buildroot/aliases:$PATH"
 
 echo "### $0: unpacking buildroot sources..."
 tar --strip-components=1 -xf /downloads/buildroot-2025.02.tar.xz
 
-mkdir dl; cd dl;
-mkdir fakeroot tar glibc mpc acl gcc automake libtool m4 binutils attr mpfr linux autoconf bison gawk gmp busybox patchelf
+mkdir -p dl; cd dl;
+mkdir -p fakeroot tar glibc mpc acl gcc automake libtool m4 binutils attr mpfr linux autoconf bison gawk gmp busybox patchelf make gettext-tiny pkgconf libzlib
 cd ..
 cp /downloads/fakeroot_1.36.orig.tar.gz dl/fakeroot/fakeroot_1.36.orig.tar.gz
 cp /downloads/tar-1.35.cpio.gz dl/tar/tar-1.35.cpio.gz
@@ -113,10 +133,14 @@ cp /downloads/gawk-5.3.1.tar.xz dl/gawk/gawk-5.3.1.tar.xz
 cp /downloads/gmp-6.3.0.tar.xz dl/gmp/gmp-6.3.0.tar.xz
 cp /downloads/busybox-1.37.0.tar.bz2 dl/busybox/busybox-1.37.0.tar.bz2
 cp /downloads/patchelf-0.13.tar.bz2 dl/patchelf/patchelf-0.13.tar.bz2
+cp /downloads/make-4.4.1.tar.lz dl/make/make-4.4.1.tar.lz
+cp /downloads/gettext-tiny-0.3.2.tar.gz dl/gettext-tiny/gettext-tiny-0.3.2.tar.gz
+cp /downloads/pkgconf-2.3.0.tar.xz dl/pkgconf/pkgconf-2.3.0.tar.xz
+cp /downloads/zlib-1.3.1.tar.xz dl/libzlib/zlib-1.3.1.tar.xz
 cp /recipes/buildroot.config .config
-sed -i 's|-a|-rltvz|g' system/system.mk
+sed -i 's|-a|-rlptgoD|g' system/system.mk
+# sed -i 's|-auH|-rlptgoDuH|g' fs/common.mk
 
-export LD_LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib"
 mkdir -p /bin
 mkdir -p /usr/bin
 ln -fs /store/2b2-busybox/bin/ash /bin/sh

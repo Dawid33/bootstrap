@@ -69,8 +69,8 @@ jobs:
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c0-libtool.sh'
       - name: Build 2c1-coreutils
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-coreutils.sh'
-      - name: Build 2c10-bash
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c10-bash.sh'
+      - name: Build 2b10-bash
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b10-bash.sh'
       - name: Build 2c1-patch
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-patch.sh'
       - name: Build 2c1-find
