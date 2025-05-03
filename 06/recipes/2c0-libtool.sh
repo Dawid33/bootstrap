@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH da8ebb2ce4dcf46b90098daf962cffa68f4b4f62ea60f798d0ef12929ede6adf   
-#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/libtool-2.5.4.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/libtool-2.4.5.tar.gz
 
 set -uex
 
@@ -32,10 +32,14 @@ ash ./configure \
 	SHELL='/store/2b2-busybox/bin/ash' \
 	--prefix=/store/2c0-libtool
 
-# export LD_PRELOAD=/store/2b4-gnugcc13/lib/libstdc++.so
+sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' \
+	./build-aux/install-sh ./build-aux/extract-trace ./build-aux/inline-source
+
 make -j $NPROC
 echo "### $0: installing GNU GAWK"
 make -j $NPROC install-strip
+
+sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' /store/2c0-libtool/bin/libtoolize
 
 echo "### $0: checking for build path leaks..."
 ( ! grep -rF /tmp/2a5 /store/2c0-libtool )

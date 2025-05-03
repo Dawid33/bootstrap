@@ -33,10 +33,11 @@ export SOURCE_DATE_EPOCH=0
 /recipes/2c1-patch.sh
 /recipes/2c1-find.sh
 /recipes/2c1-zstd.sh
+/recipes/2c1-xxhash.sh
 /recipes/2c1-rsync.sh
 /recipes/2b11-file.sh
-/recipes/2c1-gettext.sh
-/recipes/2b9-flex.sh
+/recipes/2c1-buildroot.sh
+# /recipes/2c1-gettext.sh
 # TESTING=2c2-pkg-config
 # TESTING=2c4-automake
 # TESTING=2c4-autoconf
