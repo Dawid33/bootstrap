@@ -77,9 +77,11 @@ jobs:
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-find.sh'
       - name: Build 2c1-zstd
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-zstd.sh'
+      - name: Build 2c1-xxhash
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-xxhash.sh'
       - name: Build 2c1-rsync
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-rsync.sh'
       - name: Build 2b11-file
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b11-file.sh'
-      - name: Build 2c1-gettext
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-gettext.sh'
+      - name: Build 2c1-buildroot
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-buildroot.sh'
