@@ -31,7 +31,6 @@ mv tar-1.35/* .
 rm -rf tar-1.35
 
 echo "### $0: building tar"
-# sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' /store/2c1-tar/bin/autopoint
 FORCE_UNSAFE_CONFIGURE=1 ash ./configure \
   --prefix=/store/2c1-tar
 make -j $NPROC

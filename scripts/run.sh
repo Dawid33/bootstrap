@@ -2,9 +2,8 @@
 
 # cd 05 && make 2>&1 | less -R +F 
 
-TESTING=2c1-buildroot
-# TESTING=2c1-tar
 
+TESTING=2c1-buildroot
 cd 06
 cp recipes/$TESTING.sh stage/recipes/$TESTING.sh
 cp recipes/buildroot.config stage/recipes/buildroot.config
@@ -22,3 +21,6 @@ EOF
 # ../busybox ash ./ci_stage1.sh 2>&1 | less +F
 
 # ./busybox ash ./initboot.sh 2>&1 | less +F
+
+# cd 07;
+# ./build.sh 2>&1 | less +F

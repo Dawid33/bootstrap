@@ -22,19 +22,19 @@ if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
 echo "### $0: aliasing ash to sh..."
 
-echo "### $0: unpacking GNU GAWK sources..."
+echo "### $0: unpacking find sources..."
 tar --strip-components=1 -xf /downloads/findutils-4.9.0.tar.xz
 
-echo "### $0: building GNU GAWK"
+echo "### $0: building find find"
 ash configure \
 	CONFIG_SHELL='/store/2b2-busybox/bin/ash' \
 	SHELL='/store/2b2-busybox/bin/ash' \
-	--prefix=/store/2c1-find
-# sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' \
-# 	./build-aux/install-sh po/Makefile
+	--prefix=/store/2c1-find \
+	--disable-dependency-tracking
+
 make -j $NPROC
-echo "### $0: installing GNU GAWK"
+echo "### $0: installing find"
 make -j $NPROC install-strip
 
 echo "### $0: checking for build path leaks..."
-( ! grep -rF /tmp/2a5 /store/2c1-find )
+( ! grep -rF /tmp/2c1 /store/2c1-find )

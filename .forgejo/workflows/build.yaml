@@ -18,8 +18,8 @@ jobs:
           chroot $(pwd) /busybox ash
       - name: Build tcc
         run: su root && chroot $(pwd) /busybox ash initboot.sh
-
       - name: Download tarballs and build proto-{tcc,musl,busybox}
+
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci_stage1.sh'
       - name: Build 2a0-static-gnumake
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a0-static-gnumake.sh'

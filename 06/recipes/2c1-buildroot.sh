@@ -80,6 +80,7 @@
 set -uex
 
 export PATH="/store/2b6-grep/bin"
+export PATH="$PATH:/store/2c1-tar/bin"
 export PATH="$PATH:/store/2b2-busybox/bin"
 export PATH="$PATH:/store/2c1-coreutils/bin"
 export PATH="$PATH:/store/2b3-gnumake/bin"
@@ -104,7 +105,7 @@ ln -sf /store/2c1-find/bin/find aliases/find
 export PATH="/tmp/2c1-buildroot/aliases:$PATH"
 
 echo "### $0: unpacking buildroot sources..."
-tar --strip-components=1 -xf /downloads/buildroot-2025.02.tar.xz
+tar --no-same-owner --strip-components=1 -xf /downloads/buildroot-2025.02.tar.xz
 
 # Add patch to make fakeroot work with musl
 # https://codeberg.org/aparcar/openwrt/src/branch/nourngd/tools/fakeroot/patches/400-alpine-libc.musl-fix.patch
@@ -157,13 +158,8 @@ cp /downloads/zlib-1.3.1.tar.xz dl/libzlib/zlib-1.3.1.tar.xz
 cp /downloads/lzip-1.25.tar.gz  dl/lzip/lzip-1.25.tar.gz 
 cp /recipes/buildroot.config .config
 
-sed -i 's|-a|--fake-super -a|g' system/system.mk
-sed -i 's|-auH|--fake-super -auH|g' fs/common.mk
-# TODO: possibly fix this for reproducibility, it breaks because busybox tar doesn't have this option
-sed -i 's|TAR_OPTS += --pax-option=exthdr.name=%d/PaxHeaders/%f,atime:=0,ctime:=0||g' fs/tar/tar.mk
-sed -i 's|--null||g' fs/tar/tar.mk
-sed -i "s|--xattrs-include='\*'||g" fs/tar/tar.mk
-
+# sed -i 's|-a|--fake-super -a|g' system/system.mk
+# sed -i 's|-auH|--fake-super -auH|g' fs/common.mk
 
 export LD_LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib:/store/2b4-gnugcc13/lib"
 mkdir -p /bin
@@ -176,9 +172,11 @@ ln -fs /store/2c1-patch/bin/patch /usr/bin/patch
 ln -fs /store/2b2-busybox/bin/env /usr/bin/env
 make -j $NPROC
 echo "### $0: installing buildroot"
-make install
 rm -rf /bin
 rm -rf /usr
+
+mkdir -p /store/2c1-buildroot 
+cp /tmp/2c1-buildroot/output/images/rootfs.tar /store/2c1-buildroot
 
 echo "### $0: checking for build path leaks..."
 ( ! grep -rF /tmp/2a5 /store/2c1-buildroot )
