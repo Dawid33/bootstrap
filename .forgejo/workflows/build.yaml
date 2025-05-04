@@ -68,20 +68,21 @@ jobs:
       - name: Build 2c0-libtool
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c0-libtool.sh'
       - name: Build 2c1-coreutils
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-coreutils.sh'
-      - name: Build 2b10-bash
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b10-bash.sh'
-      - name: Build 2c1-patch
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-patch.sh'
-      - name: Build 2c1-find
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-find.sh'
-      - name: Build 2c1-zstd
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-zstd.sh'
-      - name: Build 2c1-xxhash
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-xxhash.sh'
-      - name: Build 2c1-rsync
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-rsync.sh'
-      - name: Build 2b11-file
         run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b11-file.sh'
-      - name: Build 2c1-buildroot
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-buildroot.sh'
+      - name: Build 2c4-binutils
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c4-binutils.sh'
+      - name: Build 2c1-gcc-intermediate
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-gcc-intermediate.sh'
+      - name: Build 2c0-glibc
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c0-glibc.sh'
+      - name: Build 2c1-libstdc++
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-libstdc++.sh'
+      - name: Build 2c1-crosstools
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-crosstools.sh'
+      - name: Build 2c1-binutils
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-binutils.sh'
+      - name: Build 2c1-gcc
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-gcc.sh'
+
+      - name: Build build-fs
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./build_fs.sh'

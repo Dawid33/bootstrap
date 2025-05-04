@@ -10,8 +10,10 @@ export PATH="$PATH:/store/2b3-gnumake/bin"
 export PATH="$PATH:/store/2b7-gawk/bin"
 export PATH="$PATH:/store/2b4-gnugcc13/bin"
 export PATH="$PATH:/store/2c3-perl/bin"
-export PATH="$PATH:/store/2b9-binutils/bin"
+export PATH="$PATH:/store/2a1-static-binutils/bin"
 
+rm -rf /tmp/2c4-binutils
+rm -rf /fs
 mkdir -p /tmp/2c4-binutils; cd /tmp/2c4-binutils
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
@@ -20,23 +22,22 @@ tar --strip-components=1 -xf /downloads/binutils-with-gold-2.44.tar.xz
 
 echo "### $0: building static binutils..."
 sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' install-sh
-SYSROOT=/store/2c0-glibc
+mkdir -p /fs
 
 mkdir -p build; cd build;
 ash ../configure \
 	CONFIG_SHELL=/store/2b2-busybox/bin/ash \
 	SHELL=/store/2b2-busybox/bin/ash \
-	--prefix=/store/2c4-binutils \
+	--prefix=/fs/tools \
+	--with-sysroot=/fs \
 	--disable-nls       \
 	--enable-gprofng=no \
 	--disable-werror    \
 	--enable-new-dtags  \
-	--enable-default-hash-style=gnu
+	--enable-default-hash-style=gnu \
+	--target x86_64-linux-gnu
 
 make -j $NPROC
 
 echo "### $0: installing static binutils..."
 make -j $NPROC install
-
-echo "### $0: checking for build path leaks..."
-( ! grep -rF /store/2c4-binutils )

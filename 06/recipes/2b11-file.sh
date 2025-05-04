@@ -1,8 +1,8 @@
 #!/store/2b2-busybox/bin/ash
 
 
-#> FETCH   
-#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/FILE5_27.tar.gz
+#> FETCH 73c5f11a8edf0fded2fe3471b23a7fccb3f3369a13ea612529b869c8dc96aa2b
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/FILE5_46.tar.gz
 set -uex
 
 export PATH='/store/2b2-busybox/bin'
@@ -27,17 +27,17 @@ export PATH="/tmp/2b11-file/aliases:$PATH"
 echo "### $0: unpacking file sources..."
 tar --strip-components=1 -xf /downloads/FILE5_46.tar.gz
 
-# sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' configure
-grep -rl -- "/bin/sh" . | xargs sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|g';
-echo "### $0: building file"
-
 libtoolize --force
 aclocal
 autoheader
 automake --force-missing --add-missing
 autoconf
-./configure
+sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' config.sub configure 
 ash ./configure \
+	--disable-bzlib      \
+	--disable-libseccomp \
+	--disable-xzlib      \
+	--disable-zlib \
 	--prefix=/store/2b11-file
 
 make -j $NPROC
