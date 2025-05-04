@@ -3,7 +3,8 @@
 # cd 05 && make 2>&1 | less -R +F 
 
 
-TESTING=2c1-buildroot
+TESTING=2c1-glibc
+# TESTING=2c1-buildroot
 cd 06
 cp recipes/$TESTING.sh stage/recipes/$TESTING.sh
 cp recipes/buildroot.config stage/recipes/buildroot.config

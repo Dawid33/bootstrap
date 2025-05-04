@@ -17,6 +17,7 @@ export PATH="$PATH:/store/2b10-bash/bin"
 export PATH="$PATH:/store/2a8-python/bin"
 
 rm -rf /tmp/2c1-find
+rm -rf /store/2c1-find
 mkdir -p /tmp/2c1-find; cd /tmp/2c1-find
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
@@ -31,6 +32,8 @@ ash configure \
 	SHELL='/store/2b2-busybox/bin/ash' \
 	--prefix=/store/2c1-find \
 	--disable-dependency-tracking
+sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' \
+	./build-aux/install-sh po/Makefile ./build-aux/mkinstalldirs
 
 make -j $NPROC
 echo "### $0: installing find"

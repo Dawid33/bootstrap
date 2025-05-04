@@ -38,6 +38,8 @@ ash configure \
 	--disable-md2man \
 	--disable-openssl \
 	--disable-lz4 \
+	--disable-xxxhash \
+	--disable-zstd \
 	--prefix=/store/2c1-rsync
 
 make -j $NPROC

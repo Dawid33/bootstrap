@@ -94,10 +94,14 @@ export PATH="$PATH:/store/2a1-static-binutils/bin"
 export PATH="$PATH:/store/2b4-gnugcc13/bin"
 export PATH="$PATH:/store/2a8-python/bin"
 
-rm -rf /tmp/2c1-buildroot
-rm -rf /store/2c1-buildroot
+# rm -rf /tmp/2c1-buildroot
+# rm -rf /store/2c1-buildroot
 mkdir -p /tmp/2c1-buildroot; cd /tmp/2c1-buildroot
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
+
+export LD_LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib:/store/2b4-gnugcc13/lib"
+rsync -av -og --ignore-times --exclude .svn --exclude .git --exclude .hg --exclude .bzr --exclude CVS --chmod=u=rwX,go=rX --exclude .empty --exclude '*~' system/skeleton/ /tmp/2c1-buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/
+exit
 
 mkdir -p aliases;
 ln -sf /store/2c1-patch/bin/patch aliases/patch
@@ -158,8 +162,8 @@ cp /downloads/zlib-1.3.1.tar.xz dl/libzlib/zlib-1.3.1.tar.xz
 cp /downloads/lzip-1.25.tar.gz  dl/lzip/lzip-1.25.tar.gz 
 cp /recipes/buildroot.config .config
 
-# sed -i 's|-a|--fake-super -a|g' system/system.mk
-# sed -i 's|-auH|--fake-super -auH|g' fs/common.mk
+sed -i 's|-a|--super -XX -a|g' system/system.mk
+sed -i 's|-auH|--super -XX -auH|g' fs/common.mk
 
 export LD_LIBRARY_PATH="/store/2c1-xxhash/lib:/store/2c1-zstd/lib:/store/2b0-musl/lib:/store/2b4-gnugcc13/lib"
 mkdir -p /bin
