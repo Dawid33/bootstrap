@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH e316477a914f567eccc34d5d29785b8b0f5a10208d36bbacedcc39048ecfe024
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/binutils-2.38.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/binutils-2.38.tar.xz
 
 set -uex
 

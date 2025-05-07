@@ -1,7 +1,7 @@
 #!/store/2b2-busybox/bin/ash
 
 #> FETCH 97f84f3b7588cd54093a6f6389b0c1a81e70d99708d74963a2e3eab7c7dc942d
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/glibc-2.39.tar.gz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/glibc-2.39.tar.gz
 set -uex
 
 export PATH='/store/2b2-busybox/bin'

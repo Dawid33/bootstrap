@@ -4,7 +4,7 @@
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/gmp-6.3.0.tar.xz
 
 #> FETCH 277807353a6726978996945af13e52829e3abd7a9a5b7fb2793894e18f1fcbb2
-#>  FROM https://static.dawidsobczak.com/redox-toolchain-bootstrap/mpfr-4.2.1.tar.xz
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mpfr-4.2.1.tar.xz
 
 #> FETCH 617decc6ea09889fb08ede330917a00b16809b8db88c29c31bfbb49cbf88ecc3
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mpc-1.3.1.tar.gz
