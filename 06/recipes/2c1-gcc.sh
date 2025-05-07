@@ -6,12 +6,12 @@
 #> FETCH 277807353a6726978996945af13e52829e3abd7a9a5b7fb2793894e18f1fcbb2
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mpfr-4.2.1.tar.xz
 
-#> FETCH 617decc6ea09889fb08ede330917a00b16809b8db88c29c31bfbb49cbf88ecc3
-#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mpc-1.3.1.tar.gz
+#> FETCH ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8
+#>  FROM http://www.multiprecision.org/downloads/mpc-1.3.1.tar.gz
 
-#> FETCH a7b39bc69cbf9e25826c5a60ab26477001f7c08d85cec04bc0e29cabed6f3cc9
+#> FETCH 0845e9621c9543a13f484e94584a49ffc0129970e9914624235fc1d061a0c083
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/gcc-13.3.0.tar.xz
- 
+
 set -uex
 
 export PATH="/store/2b7-gawk/bin"
