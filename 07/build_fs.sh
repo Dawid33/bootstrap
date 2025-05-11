@@ -1,5 +1,5 @@
 set -x
-./download.sh
+../busybox ash ./download.sh
 
 ../busybox rm -rf fs
 ../busybox cp -r ../06/stage/fs fs
