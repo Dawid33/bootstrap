@@ -45,22 +45,22 @@
 # TESTING=host-pkg-config
 # TESTING=host-gdb
 # TESTING=temp-mrustc
-# TESTING=temp-rust-1.75
+TESTING=host-rust
 cd 07;
 cp recipes/$TESTING.sh fs/tmp/recipes/$TESTING.sh
 
 export NPROC=16
-unshare -nrm <<EOF
-  mkdir -p fs/dev/shm;
-  mkdir -p fs/dev; :> fs/dev/null
-  mount --bind /dev/null fs/dev/null
-  mount -t tmpfs tmpfs fs/dev/shm
-  env -i "NPROC=$NPROC" unshare -nrm ../busybox chroot "fs" /usr/bin/env -i   \
-      HOME=/root                  \
-      PS1='(chroot) \u:\w\$ ' \
-      TERM="xterm" \
-      PATH=/usr/bin:/usr/sbin     \
-      TESTSUITEFLAGS="-j$($NPROC)" \
-      NPROC="$NPROC" \
-      /bin/bash --login /tmp/recipes/$TESTING.sh 2>&1 | less +F
-EOF
+mkdir -p fs/dev/shm;
+mkdir -p fs/proc;
+mkdir -p fs/dev; :> fs/dev/null
+sudo mount --bind /dev/null fs/dev/null
+sudo mount -t proc /proc fs/proc/
+sudo mount -t tmpfs tmpfs fs/dev/shm
+env -i "NPROC=$NPROC" unshare -nrm ../busybox chroot "fs" /usr/bin/env -i   \
+    HOME=/root                  \
+    PS1='(chroot) \u:\w\$ ' \
+    TERM="xterm" \
+    PATH=/usr/bin:/usr/sbin     \
+    TESTSUITEFLAGS="-j$($NPROC)" \
+    NPROC="$NPROC" \
+    /bin/bash --login /tmp/recipes/$TESTING.sh 2>&1 | less +F
