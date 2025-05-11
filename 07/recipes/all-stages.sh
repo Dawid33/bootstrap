@@ -15,5 +15,6 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 /tmp/recipes/host-zlib.sh
 /tmp/recipes/host-pkg-config.sh
 /tmp/recipes/host-gdb.sh
+/tmp/recipes/temp-mrustc.sh
 
 
