@@ -28,8 +28,8 @@
 
 # ./busybox ash ./initboot.sh 2>&1 | less +F
 
-cd 07;
 # TESTING=all-stages
+# TESTING=host-python
 # TESTING=host-cpio
 # TESTING=host-bzip2
 # TESTING=host-tar
@@ -37,14 +37,15 @@ cd 07;
 # TESTING=host-gettext
 # TESTING=host-bison
 # TESTING=host-perl
-TESTING=host-python
 # TESTING=host-texinfo
 # TESTING=host-util-linux
 # TESTING=host-cmake
 # TESTING=host-zlib
 # TESTING=host-pkg-config
-# TESTING=temp-mrustc
-# cp recipes/$TESTING.sh fs/tmp/recipes/$TESTING.sh
+# TESTING=host-gdb
+TESTING=temp-mrustc
+cd 07;
+cp recipes/$TESTING.sh fs/tmp/recipes/$TESTING.sh
 
 export NPROC=16
 unshare -nrm <<EOF
@@ -57,7 +58,7 @@ unshare -nrm <<EOF
       PS1='(chroot) \u:\w\$ ' \
       TERM="xterm" \
       PATH=/usr/bin:/usr/sbin     \
-      MAKEFLAGS="-j$($NPROC)"      \
       TESTSUITEFLAGS="-j$($NPROC)" \
+      NPROC="$NPROC" \
       /bin/bash --login /tmp/recipes/$TESTING.sh 2>&1 | less +F
 EOF

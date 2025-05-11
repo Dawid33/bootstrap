@@ -35,6 +35,7 @@ mkdir build && cd build;
 ash ../configure                             \
 	CONFIG_SHELL='/store/2b2-busybox/bin/ash' \
 	SHELL='/store/2b2-busybox/bin/ash' \
+	LDFLAGS="-shared-libgcc" \
 	CFLAGS='-O2' \
 	--prefix=/usr                      \
 	--host=x86_64-linux-gnu                    \

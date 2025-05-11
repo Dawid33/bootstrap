@@ -61,3 +61,7 @@ rm -v /fs/usr/lib/libstdc++.la
 rm -v /fs/usr/lib/libstdc++exp.la
 rm -v /fs/usr/lib/libstdc++fs.la
 rm -v /fs/usr/lib/libsupc++.la
+rm -v /fs/usr/lib/libstdc++.a
+rm -v /fs/usr/lib/libstdc++exp.a
+rm -v /fs/usr/lib/libstdc++fs.a
+rm -v /fs/usr/lib/libsupc++.a

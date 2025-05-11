@@ -56,6 +56,20 @@ ash ../configure \
 	--without-headers         \
 	--enable-default-pie      \
 	--enable-default-ssp      \
+	--disable-libquadmath --disable-decimal-float --disable-fixed-point \
+	--disable-lto \
+	--disable-libgomp \
+	--disable-multilib \
+	--without-static-standard-libraries \
+	--disable-multiarch \
+	--disable-libmudflap \
+	--disable-libssp \
+	--disable-libitm \
+	--disable-libsanitizer \
+	--disable-cet \
+	--disable-gnu-unique-object \
+	--disable-gcov \
+	--disable-checking \
 	--disable-nls             \
 	--disable-shared          \
 	--disable-multilib        \

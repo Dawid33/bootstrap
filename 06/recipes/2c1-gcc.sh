@@ -30,16 +30,26 @@ rm -rf /store/2c1-gcc
 mkdir -p /tmp/2c1-gcc; cd /tmp/2c1-gcc
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
+# rm -v /fs/usr/lib/libstdc++.la
+# rm -v /fs/usr/lib/libstdc++exp.la
+# rm -v /fs/usr/lib/libstdc++fs.la
+# rm -v /fs/usr/lib/libsupc++.la
+# rm -v /fs/usr/lib/libstdc++.a
+# rm -v /fs/usr/lib/libstdc++exp.a
+# rm -v /fs/usr/lib/libstdc++fs.a
+# rm -v /fs/usr/lib/libsupc++.a
+
 echo "### $0: aliasing ash to sh..."
 mkdir aliases; ln -s /store/2b2-busybox/bin/ash aliases/sh
 export PATH="/tmp/2c1-gcc/aliases:$PATH"
 
 echo "### $0: unpacking GNU GCC 13 sources..."
-mkdir gmp mpfr mpc
+mkdir gmp mpfr mpc isl
 tar --strip-components=1 -xf /downloads/gcc-13.3.0.tar.xz
-tar --strip-components=1 -xf /downloads/gmp-6.3.0.tar.xz -C gmp
-tar --strip-components=1 -xf /downloads/mpfr-4.2.1.tar.xz -C mpfr
-tar --strip-components=1 -xf /downloads/mpc-1.3.1.tar.gz -C mpc
+tar --strip-components=1 -xf /downloads/gmp-6.1.0.tar.xz -C gmp
+tar --strip-components=1 -xf /downloads/mpfr-3.1.4.tar.xz -C mpfr
+tar --strip-components=1 -xf /downloads/mpc-1.0.3.tar.gz -C mpc
+tar --strip-components=1 -xf /downloads/isl-0.18.tar.bz2 -C isl
 
 echo "### $0: fixing up GNU GCC 13 sources..."
 # If building on x86_64, change the default directory name for 64-bit libraries to “lib”
@@ -51,7 +61,6 @@ sed -i 's|/bin/sh|/store/2b2-busybox/bin/ash|' \
 	mpfr/tools/get_patches.sh gcc/configure
 sed -i 's|^\(\s*\)sh |\1/store/2b2-busybox/bin/ash |' \
 	libgcc/Makefile.in
-sed -i 's|m64=../lib64|m64=../lib|' gcc/config/i386/t-linux64
 
 # Override the building rule of libgcc and libstdc++ headers, to allow building these
 # libraries with POSIX threads support
@@ -63,11 +72,10 @@ ash ../configure                                   \
     --build=$(../config.guess)                     \
     --host=x86_64-linux-gnu                        \
     --target=x86_64-linux-gnu                      \
-    LDFLAGS_FOR_TARGET=-L/tmp/2c1-gcc/x86_64-linux-gnu/libgcc \
+    LDFLAGS_FOR_TARGET="-L/tmp/2c1-gcc/build/x86_64-linux-gnu/libgcc" \
     --prefix=/usr                                  \
     --with-build-sysroot=/fs                       \
-		--disable-libquadmath \
-		--disable-fixed-point \
+		--disable-libquadmath --disable-decimal-float --disable-fixed-point \
 		--disable-lto \
 		--disable-libgomp \
 		--disable-multilib \
