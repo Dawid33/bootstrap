@@ -1,22 +1,22 @@
 set -x
 ./download.sh
 
-rm -rf fs
-cp -r ../06/stage/fs fs
-rm fs/lib64
-ln -s /usr/lib fs/lib64
-rm fs/bin/sh
-ln -s /usr/bin/bash fs/bin/sh
-ln -s /usr/bin/bash fs/bin/bash
-mkdir -p fs/root
-mkdir -p fs/etc
-mkdir -p fs/usr/local
+../busybox rm -rf fs
+../busybox cp -r ../06/stage/fs fs
+../busybox rm fs/lib64
+../busybox ln -s /usr/lib fs/lib64
+../busybox rm fs/bin/sh
+../busybox ln -s /usr/bin/bash fs/bin/sh
+../busybox ln -s /usr/bin/bash fs/bin/bash
+../busybox mkdir -p fs/root
+../busybox mkdir -p fs/etc
+../busybox mkdir -p fs/usr/local
 
-mkdir -p fs/tmp
-cp -r downloads fs/tmp/downloads
-cp -r recipes fs/tmp/recipes
+../busybox mkdir -p fs/tmp
+../busybox cp -r downloads fs/tmp/downloads
+../busybox cp -r recipes fs/tmp/recipes
 
-cat > fs/etc/passwd << "EOF"
+../busybox cat > fs/etc/passwd << "EOF"
 root:x:0:0:root:/root:/bin/bash
 bin:x:1:1:bin:/dev/null:/usr/bin/false
 daemon:x:6:6:Daemon User:/dev/null:/usr/bin/false
@@ -25,7 +25,7 @@ uuidd:x:80:80:UUID Generation Daemon User:/dev/null:/usr/bin/false
 nobody:x:65534:65534:Unprivileged User:/dev/null:/usr/bin/false
 EOF
 
-cat > fs/etc/group << "EOF"
+../busybox cat > fs/etc/group << "EOF"
 root:x:0:
 bin:x:1:daemon
 sys:x:2:

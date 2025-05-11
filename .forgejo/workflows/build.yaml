@@ -86,3 +86,5 @@ jobs:
 
       - name: Build build-fs
         run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./build_fs.sh'
+      - name: Build host-python
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-python'
