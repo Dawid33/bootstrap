@@ -36,7 +36,6 @@ ash ../configure               \
     --prefix=/usr              \
     --build=$(../config.guess) \
     --host=x86_64-linux-gnu    \
-    --without-static-standard-libraries \
     --disable-nls              \
     --enable-shared            \
     --enable-gprofng=no        \

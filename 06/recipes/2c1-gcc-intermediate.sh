@@ -60,7 +60,6 @@ ash ../configure \
 	--disable-lto \
 	--disable-libgomp \
 	--disable-multilib \
-	--without-static-standard-libraries \
 	--disable-multiarch \
 	--disable-libmudflap \
 	--disable-libssp \

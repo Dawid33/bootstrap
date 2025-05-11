@@ -10,6 +10,7 @@
 # TESTING=2c1-crosstools
 # TESTING=2c1-binutils
 # TESTING=2c1-gcc
+# TESTING=2b4-gnugcc13
 # cd 06
 # cp recipes/$TESTING.sh stage/recipes/$TESTING.sh
 # cp recipes/buildroot.config stage/recipes/buildroot.config
@@ -43,7 +44,8 @@
 # TESTING=host-zlib
 # TESTING=host-pkg-config
 # TESTING=host-gdb
-TESTING=temp-mrustc
+# TESTING=temp-mrustc
+# TESTING=temp-rust-1.75
 cd 07;
 cp recipes/$TESTING.sh fs/tmp/recipes/$TESTING.sh
 
