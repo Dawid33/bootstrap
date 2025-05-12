@@ -17,6 +17,10 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 /tmp/recipes/host-gdb.sh
 /tmp/recipes/host-openssl.sh
 /tmp/recipes/temp-mrustc.sh
-/tmp/recipes/host-rust.sh
+/tmp/recipes/temp-rust-1.76.sh
+/tmp/recipes/temp-rust-1.77.sh
+/tmp/recipes/temp-rust-1.78.sh
+/tmp/recipes/temp-rust-1.79.sh
+/tmp/recipes/temp-rust-1.80.sh
 
 
