@@ -44,8 +44,9 @@
 # TESTING=host-zlib
 # TESTING=host-pkg-config
 # TESTING=host-gdb
+# TESTING=host-openssl
 # TESTING=temp-mrustc
-TESTING=host-rust
+TESTING=temp-rust-1.76
 cd 07;
 cp recipes/$TESTING.sh fs/tmp/recipes/$TESTING.sh
 

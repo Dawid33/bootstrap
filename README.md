@@ -9,6 +9,6 @@ docker run --rm -it $(docker build -q .)
 ## Documentation
 
 - [TinyCC Boostrap (stages 1-5)](./BOOSTRAP.md)
-- [TinyCC -> RedoxOS Toolchain (stage 6)](./06/README.md)
+- [TinyCC -> RedoxOS Toolchain (stage 6-7)](./06/README.md)
 
 
