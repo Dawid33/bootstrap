@@ -19,7 +19,7 @@ set -uex
 
 export PATH='/store/2b2-busybox/bin'
 export PATH="$PATH:/store/2b3-gnumake/bin"
-export PATH="$PATH:/store/2a5-gnugcc10/bin"
+export PATH="$PATH:/store/2b1-clang/bin"
 export PATH="$PATH:/store/2a1-static-binutils/bin"
 
 rm -rf /tmp/2b4-gnugcc13

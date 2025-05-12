@@ -51,10 +51,10 @@ set -uex
 # TESTING=temp-rust-1.78
 # TESTING=temp-rust-1.79
 # TESTING=temp-rust-1.80
-TESTING=temp-rust-1.81
+# TESTING=temp-rust-1.81
 # TESTING=temp-rust-1.82
 # TESTING=temp-rust-1.83
-# TESTING=temp-rust-1.84
+TESTING=temp-rust-1.84
 # TESTING=temp-rust-1.85
 # TESTING=temp-rust-1.86
 cd 07;
