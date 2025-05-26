@@ -1,8 +1,10 @@
 #!/bin/bash
 set -uex
+
+RUST_BACKTRACE=1 cargo run --manifest-path strap/Cargo.toml --color=always 2>&1 run 00 | less -R +F 
+
+
 # cd 05 && make 2>&1 | less -R +F 
-
-
 # TESTING=2c4-binutils
 # TESTING=2c1-gcc-intermediate
 # TESTING=2c0-glibc
@@ -54,29 +56,29 @@ set -uex
 # TESTING=temp-rust-1.81
 # TESTING=temp-rust-1.82
 # TESTING=temp-rust-1.83
-TESTING=temp-rust-1.84
+# TESTING=temp-rust-1.84
 # TESTING=temp-rust-1.85
 # TESTING=temp-rust-1.86
-cd 07;
-cp recipes/$TESTING.sh fs/tmp/recipes/$TESTING.sh
+# cd 07;
+# cp recipes/$TESTING.sh fs/tmp/recipes/$TESTING.sh
 
-export NPROC=16
-unshare -nrmfp /bin/bash --noprofile <<EOF
-    mkdir -p fs/dev/shm;
-    mkdir -p fs/proc;
-    mkdir -p fs/dev; :> fs/dev/null
-    mkdir -p fs/dev/shm
+# export NPROC=16
+# unshare -nrmfp /bin/bash --noprofile <<EOF
+#     mkdir -p fs/dev/shm;
+#     mkdir -p fs/proc;
+#     mkdir -p fs/dev; :> fs/dev/null
+#     mkdir -p fs/dev/shm
 
-    mount -t tmpfs tmpfs fs/dev/shm
-    mount --bind /dev/null fs/dev/null
-    mount -tproc none fs/proc;
-    env -i "NPROC=$NPROC" unshare -nrm ../busybox chroot "fs" /usr/bin/env -i   \
-        HOME=/root                  \
-        PS1='(chroot) \u:\w\$ ' \
-        TERM="xterm" \
-        PATH=/usr/bin:/usr/sbin     \
-        TESTSUITEFLAGS="-j$($NPROC)" \
-        NPROC="$NPROC" \
-        /bin/bash --login /tmp/recipes/$TESTING.sh 2>&1 | less +F
-EOF
+#     mount -t tmpfs tmpfs fs/dev/shm
+#     mount --bind /dev/null fs/dev/null
+#     mount -tproc none fs/proc;
+#     env -i "NPROC=$NPROC" unshare -nrm ../busybox chroot "fs" /usr/bin/env -i   \
+#         HOME=/root                  \
+#         PS1='(chroot) \u:\w\$ ' \
+#         TERM="xterm" \
+#         PATH=/usr/bin:/usr/sbin     \
+#         TESTSUITEFLAGS="-j$($NPROC)" \
+#         NPROC="$NPROC" \
+#         /bin/bash --login /tmp/recipes/$TESTING.sh 2>&1 | less +F
+# EOF
 

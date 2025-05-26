@@ -99,3 +99,49 @@ jobs:
           chroot $(pwd) /busybox ash
       - name: Build host-python
         run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-python'
+      - name: Build host-bzip2
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-bzip2'
+      - name: Build host-busybox
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-busybox'
+      - name: Build host-gettext
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-gettext'
+      - name: Build host-bison
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-bison'
+      - name: Build host-perl
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-perl'
+      - name: Build host-texinfo
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-texinfo'
+      - name: Build host-util-linux
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-util-linux'
+      - name: Build host-cmake
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-cmake'
+      - name: Build host-zlib
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-zlib'
+      - name: Build host-pkg-config
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-pkg-config'
+      - name: Build host-openssl
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-openssl'
+      - name: Build temp-mrustc
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-mrustc'
+      - name: Build temp-rust-1.76
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.76'
+      - name: Build temp-rust-1.77
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.77'
+      - name: Build temp-rust-1.78
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.78'
+      - name: Build temp-rust-1.79
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.79'
+      - name: Build temp-rust-1.80
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.80'
+      - name: Build temp-rust-1.81
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.81'
+      - name: Build temp-rust-1.82
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.82'
+      - name: Build temp-rust-1.83
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.83'
+      - name: Build temp-rust-1.84
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.84'
+      - name: Build temp-rust-1.85
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.85'
+      - name: Build host-rust-1.86
+        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-rust-1.86'
