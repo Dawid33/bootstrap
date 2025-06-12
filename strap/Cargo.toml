@@ -6,4 +6,9 @@ edition = "2024"
 [dependencies]
 clap = { version = "4.5.38", optional = false, features = ["derive"]}
 serde = { version = "1.0.219", features = ["derive"]}
-mlua = { version = "0.10.3", optional = false, features = ["vendored", "luau"]}
+mlua = { version = "0.10.3", optional = false, features = ["vendored", "lua54"]}
+simplelog = "0.12.2"
+log = "*"
+landlock = "0.4.2"
+unshare = "0.7.0"
+regex = "1.11.1"

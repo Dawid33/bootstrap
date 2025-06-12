@@ -55,7 +55,6 @@ set -x
 
 	(cd $TCCDIR && ./tcc0 -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-bootstrap/include tcc.c ../musl-bootstrap/lib/*.[oa] -o tcc)
 
-
 	../busybox mkdir -p musl-bootstrap-final/include
 	../busybox mkdir -p musl-bootstrap-final/bin
 	../busybox mkdir -p musl-bootstrap-final/lib
