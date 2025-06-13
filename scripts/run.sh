@@ -1,7 +1,7 @@
 #!/bin/bash
 set -uex
 
-RUST_BACKTRACE=1 cargo run --target=x86_64-unknown-linux-musl --manifest-path strap/Cargo.toml --color=always 2>&1 run 00 0.0.0 build | less -R +F 
+RUST_BACKTRACE=1 cargo run --target=x86_64-unknown-linux-musl --manifest-path strap/Cargo.toml --color=always 2>&1 run tcc-bootstrap 0.0.0 build | less -R +F 
 
 
 # cd 05 && make 2>&1 | less -R +F 

@@ -102,31 +102,13 @@ pub fn load_lua_globals(lua: &mut Lua, path: &str) {
             let name = iter.next().unwrap().unwrap().1;
             let mut cmd = std::process::Command::new(name);
             cmd.current_dir(working_directory);
-            cmd.stdout(Stdio::piped());
-            cmd.stderr(Stdio::piped());
             while let Some(arg) = iter.next() {
                 cmd.arg(arg.unwrap().1);
             }
-            let mut child = cmd.spawn().unwrap();
-            let stdout = child.stdout.take().unwrap();
-            let stderr = child.stderr.take().unwrap();
-            let mut reader = BufReader::new(stdout);
-            let mut errreader = BufReader::new(stderr);
-            let mut buf = String::new();
-            while let Ok(status) = child.try_wait() {
-                if let Ok(_) = reader.read_line(&mut buf) {
-                    print!("{}", buf);
-                    buf.clear();
-                }
-                if let Ok(_) = errreader.read_line(&mut buf) {
-                    print!("{}", buf);
-                    buf.clear();
-                }
-                match status {
-                    Some(status) => break,
-                    None => (),
-                }
-            }
+            println!(
+                "{}",
+                String::from_utf8(cmd.output().unwrap().stdout).unwrap()
+            );
             Ok(())
         })
         .unwrap();
