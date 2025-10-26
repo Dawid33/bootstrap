@@ -24,10 +24,10 @@ fetch() {
 			echo "$hash $filename" | ../../busybox sed -e 's/^[[:space:]]*//' | ../../busybox sha256sum -c
 		cd -
 	else
-		echo "wget $url"
+		echo "wget -t 0 $url"
 		../busybox mkdir -p downloads/.tmp$$
 		cd  downloads/.tmp$$
-			../../../busybox wget "$url" -O "$filename" --no-check-certificate
+			../../../busybox wget -t 0 "$url" -O "$filename" --no-check-certificate
 			echo "$hash $filename" | ../../../busybox sed -e 's/^[[:space:]]*//' > .sha
 			../../../busybox sha256sum -c .sha
 		cd - 

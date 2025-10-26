@@ -1,2 +1,4 @@
 06/stage
-06/downloads
+07/fs
+ci.dockerfile
+.dockerignore

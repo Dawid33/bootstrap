@@ -7,4 +7,5 @@ for arg in "$@"; do
   echo "#>  FROM $arg"
   cp $filename stage/downloads
   cp $filename downloads
+  rm $filename
 done

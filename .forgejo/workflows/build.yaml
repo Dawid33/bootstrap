@@ -4,144 +4,185 @@ on: [push]
 jobs:
   build:
     runs-on: docker
+    container:
+      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
-      - name: Setup chroot
+      - name:  Move tarballs from Docker image into workdir
         run: |
-          su root
-          mkdir -p 06/stage/dev/shm
-          mkdir -p etc
-          echo "nameserver 8.8.8.8"  > etc/resolv.conf
-          mknod 06/stage/dev/null c 1 3
-          chmod 666 06/stage/dev/null
-          chroot $(pwd) /busybox ash
+          mkdir -p 06/downloads
+          cp /06/* 06/downloads
+          mkdir -p 07/downloads
+          cp /07/* 07/downloads
       - name: Build tcc
-        run: su root && chroot $(pwd) /busybox ash initboot.sh
-      - name: Download tarballs and build proto-{tcc,musl,busybox}
-
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci_stage1.sh'
+        run: proot  --bind=/dev --rootfs=$(pwd) -w / -0 /busybox ash initboot.sh
+      - name: Download Tarballs And Setup Proto-{tcc,musl,busybox}
+        run: proot  --bind=/dev --rootfs=$(pwd) -w / -0 /busybox ash -c 'cd 06 && /busybox ash ./ci_stage1.sh'
+      - name: Build proto-{tcc,musl,busybox}
+        run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run /recipes/1-stage1.c
       - name: Build 2a0-static-gnumake
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a0-static-gnumake.sh'
+        run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a0-static-gnumake.sh
       - name: Build 2a1-static-binutils
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a1-static-binutils.sh'
+        run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a1-static-binutils.sh
       - name: Build 2a2-static-gnugcc4-c
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a2-static-gnugcc4-c.sh'
+        run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a2-static-gnugcc4-c.sh
       - name: Build 2a3-intermediate-musl
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a3-intermediate-musl.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a3-intermediate-musl.sh
       - name: Build 2a4-gnugcc4-cpp
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a4-gnugcc4-cpp.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a4-gnugcc4-cpp.sh
       - name: Build 2a5-gnugcc10
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a5-gnugcc10.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a5-gnugcc10.sh
       - name: Build 2a6-linux-headers
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a6-linux-headers.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a6-linux-headers.sh
       - name: Build 2a7-cmake
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a7-cmake.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0  /recipes/2a7-cmake.sh
       - name: Build 2a8-python
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a8-python.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a8-python.sh
       - name: Build 2a9-intermediate-clang
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2a9-intermediate-clang.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a9-intermediate-clang.sh
       - name: Build 2b0-musl
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b0-musl.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b0-musl.sh
       - name: Build 2b1-clang
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b1-clang.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b1-clang.sh
       - name: Build 2b2-busybox
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b2-busybox.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b2-busybox.sh
       - name: Build 2b3-gnumake
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b3-gnumake.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b3-gnumake.sh
       - name: Build 2b4-gnugcc13
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b4-gnugcc13.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b4-gnugcc13.sh
       - name: Build 2b5-m4
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b5-m4.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b5-m4.sh
       - name: Build 2b6-grep
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b6-grep.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b6-grep.sh
       - name: Build 2b7-gawk
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b7-gawk.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b7-gawk.sh
       - name: Build 2b8-bison
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b8-bison.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b8-bison.sh
       - name: Build 2c3-perl
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c3-perl.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c3-perl.sh
       - name: Build 2c4-autoconf
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c4-autoconf.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c4-autoconf.sh
       - name: Build 2c4-automake
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c4-automake.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c4-automake.sh
       - name: Build 2c0-libtool
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c0-libtool.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c0-libtool.sh
       - name: Build 2c1-coreutils
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2b11-file.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b11-file.sh
       - name: Build 2c4-binutils
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c4-binutils.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c4-binutils.sh
       - name: Build 2c1-gcc-intermediate
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-gcc-intermediate.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-gcc-intermediate.sh
       - name: Build 2c0-glibc
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c0-glibc.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c0-glibc.sh
       - name: Build 2c1-libstdc++
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-libstdc++.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-libstdc++.sh
       - name: Build 2c1-crosstools
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-crosstools.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-crosstools.sh
       - name: Build 2c1-binutils
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-binutils.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-binutils.sh
       - name: Build 2c1-gcc
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 06 && /busybox ash ./ci.sh /recipes/2c1-gcc.sh'
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-gcc.sh
 
       - name: Build build-fs
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./build_fs.sh'
-      - name: Setup chroot in fs
         run: |
-          su root
-          mkdir -p 07/fs/dev/shm
-          mkdir -p 07/fs/proc
+          set -uex
           mkdir -p etc
           echo "nameserver 8.8.8.8"  > etc/resolv.conf
-          mknod 07/fs/dev/null c 1 3
-          chmod 666 07/fs/dev/null
-          mount -tproc none 07/fs/proc;
-          chroot $(pwd) /busybox ash
+          cd 07;
+          ../busybox ash ./download.sh
+          ../busybox cp -r ../06/stage/fs fs
+          ../busybox rm fs/lib64
+          ../busybox ln -s /usr/lib fs/lib64
+          ../busybox rm fs/bin/sh
+          ../busybox ln -s /usr/bin/bash fs/bin/sh
+          ../busybox ln -s /usr/bin/bash fs/bin/bash
+          ../busybox mkdir -p fs/root
+          ../busybox mkdir -p fs/usr/local
+          ../busybox mkdir -p fs/tmp
+          ../busybox mv downloads fs/tmp/downloads
+          ../busybox cp recipes fs/tmp/recipes
+
+          ../busybox cat > fs/etc/passwd << "EOF"
+          root:x:0:0:root:/root:/bin/bash
+          bin:x:1:1:bin:/dev/null:/usr/bin/false
+          daemon:x:6:6:Daemon User:/dev/null:/usr/bin/false
+          messagebus:x:18:18:D-Bus Message Daemon User:/run/dbus:/usr/bin/false
+          uuidd:x:80:80:UUID Generation Daemon User:/dev/null:/usr/bin/false
+          nobody:x:65534:65534:Unprivileged User:/dev/null:/usr/bin/false
+          EOF
+
+          ../busybox cat > fs/etc/group << "EOF"
+          root:x:0:
+          bin:x:1:daemon
+          sys:x:2:
+          kmem:x:3:
+          tape:x:4:
+          tty:x:5:
+          daemon:x:6:
+          floppy:x:7:
+          disk:x:8:
+          lp:x:9:
+          dialout:x:10:
+          audio:x:11:
+          video:x:12:
+          utmp:x:13:
+          cdrom:x:15:
+          adm:x:16:
+          messagebus:x:18:
+          input:x:24:
+          mail:x:34:
+          kvm:x:61:
+          uuidd:x:80:
+          wheel:x:97:
+          users:x:999:
+          nogroup:x:65534:
+          EOF
       - name: Build host-python
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-python'
+        run: ./07/ci.sh host-python.sh
       - name: Build host-bzip2
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-bzip2'
+        run: ./07/ci.sh host-bzip2.sh
       - name: Build host-busybox
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-busybox'
+        run: ./07/ci.sh host-busybox.sh
       - name: Build host-gettext
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-gettext'
+        run: ./07/ci.sh host-gettext.sh
       - name: Build host-bison
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-bison'
+        run: ./07/ci.sh host-bison.sh
       - name: Build host-perl
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-perl'
+        run: ./07/ci.sh host-perl.sh
       - name: Build host-texinfo
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-texinfo'
+        run: ./07/ci.sh host-texinfo.sh
       - name: Build host-util-linux
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-util-linux'
+        run: ./07/ci.sh host-util-linux.sh
       - name: Build host-cmake
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-cmake'
+        run: ./07/ci.sh host-cmake.sh
       - name: Build host-zlib
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-zlib'
+        run: ./07/ci.sh host-zlib.sh
       - name: Build host-pkg-config
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-pkg-config'
+        run: ./07/ci.sh host-pkg-config.sh
       - name: Build host-openssl
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-openssl'
+        run: ./07/ci.sh host-openssl.sh
       - name: Build temp-mrustc
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-mrustc'
+        run: ./07/ci.shci.shtemp-mrustc.sh
       - name: Build temp-rust-1.76
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.76'
+        run: ./07/ci.sh temp-rust-1.76.sh
       - name: Build temp-rust-1.77
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.77'
+        run: ./07/ci.sh temp-rust-1.77.sh
       - name: Build temp-rust-1.78
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.78'
+        run: ./07/ci.sh temp-rust-1.78.sh
       - name: Build temp-rust-1.79
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.79'
+        run: ./07/ci.sh temp-rust-1.79.sh
       - name: Build temp-rust-1.80
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.80'
+        run: ./07/ci.sh temp-rust-1.80.sh
       - name: Build temp-rust-1.81
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.81'
+        run: ./07/ci.sh temp-rust-1.81.sh
       - name: Build temp-rust-1.82
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.82'
+        run: ./07/ci.sh temp-rust-1.82.sh
       - name: Build temp-rust-1.83
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.83'
+        run: ./07/ci.sh temp-rust-1.83.sh
       - name: Build temp-rust-1.84
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.84'
+        run: ./07/ci.sh temp-rust-1.84.sh
       - name: Build temp-rust-1.85
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh temp-rust-1.85'
+        run: ./07/ci.sh temp-rust-1.85.sh
       - name: Build host-rust-1.86
-        run: su root && chroot $(pwd) /busybox ash -c 'cd 07 && /busybox ash ./ci.sh host-rust-1.86'
+        run: ./07/ci.sh host-rust-1.86.sh

@@ -1,6 +1,6 @@
 #!/store/2b2-busybox/bin/ash
 
-#> FETCH 37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3
+#> FETCH eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/zstd-1.5.7.tar.gz 
  
 export PATH='/store/2b2-busybox/bin'

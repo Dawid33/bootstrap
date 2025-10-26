@@ -1,1 +1,0 @@
-/home/dawids/.local/share/strap/repos/official

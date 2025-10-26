@@ -11,7 +11,8 @@ set -uex
 
 export NPROC=10
 
-../busybox cp ../05/tcc-final/tcc tcc-seed
+../busybox cp ../05/tcc-final/out/tcc tcc-seed
+./tcc-seed --help
 
 # Create a stage directory
 ../busybox mkdir -p stage
@@ -22,6 +23,9 @@ export NPROC=10
 # Inject initial tcc and our scripts; pre-unpack and patch stage 1 sources,
 # in a separate file because it makes sense to run it separately sometimes.
 ../busybox ash ./seed.sh
+../busybox ls -la .
+../busybox ls -la stage
+../busybox ls -la stage/store
+../busybox ls -la stage/recipes
 
-../busybox chroot ./stage /store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run /recipes/1-stage1.c
 

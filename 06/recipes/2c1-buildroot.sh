@@ -3,14 +3,14 @@
 #> FETCH 889249bdc79b0a32f2911c3f7c0049c60eb90b9c9ad75aab367022fb3e216e41
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/buildroot-2025.02.tar.xz 
 
-#> FETCH 7fe3cf3daf95ee93b47e568e85f4d341a1f9ae91766b4f9a9cdc29737dea4988
-#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/fakeroot_1.36.orig.tar.gz
+#> FETCH 959496928c8a676ec8377f665ff6a19a707bfad693325f9cc4a4126642f53224
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/fakeroot_1.37.1.2.orig.tar.gz
 
 #> FETCH c77a38fcf25b21fd8209d20d35638744344ded239cfc7df80138bf46d3c6b16d
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/tar-1.35.cpio.gz
  
-#> FETCH ed2cd1f058f22f682e700c5be408975db62025a14863a5a6700ee93d5927504e
-#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/glibc-2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163.tar.gz
+#> FETCH c7be6e25eeaf4b956f5d4d56a04d23e4db453fc07760f872903bb61a49519b80
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/glibc-2.41.tar.gz
  
 #> FETCH ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/mpc-1.3.1.tar.gz
@@ -48,8 +48,8 @@
 #> FETCH 9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/bison-3.8.2.tar.xz
  
-#> FETCH 694db764812a6236423d4ff40ceb7b6c4c441301b72ad502bb5c27e00cd56f78
-#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/gawk-5.3.1.tar.xz
+#> FETCH f8c3486509de705192138b00ef2c00bbbdd0e84c30d5c07d23fc73a9dc4cc9cc
+#>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/gawk-5.3.2.tar.xz
  
 #> FETCH a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/gmp-6.3.0.tar.xz
@@ -140,7 +140,7 @@ mkdir -p fakeroot tar glibc mpc acl gcc automake libtool \
   # gcc-bare-metal newlib-bare-metal binutils-bare-metal isl
 
 cd ..
-cp /downloads/fakeroot_1.36.orig.tar.gz dl/fakeroot/fakeroot_1.36.orig.tar.gz
+cp /downloads/fakeroot_1.37.1.2.orig.tar.gz dl/fakeroot/fakeroot_1.37.1.2.orig.tar.gz
 cp /downloads/tar-1.35.cpio.gz dl/tar/tar-1.35.cpio.gz
 cp /downloads/glibc-2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163.tar.gz dl/glibc/glibc-2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163.tar.gz
 cp /downloads/mpc-1.3.1.tar.gz dl/mpc/mpc-1.3.1.tar.gz

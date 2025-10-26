@@ -1,5 +1,5 @@
 set -x
-echo "Hello, World!"
+
 ( cd 00; ./hexcompile; )
 (
   cd 01;

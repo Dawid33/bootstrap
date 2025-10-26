@@ -11,6 +11,7 @@ set -x
 ../busybox mkdir -p fs/root
 ../busybox mkdir -p fs/etc
 ../busybox mkdir -p fs/usr/local
+../busybox mkdir -p fs/dev
 
 ../busybox mkdir -p fs/tmp
 ../busybox cp -r downloads fs/tmp/downloads

@@ -19,8 +19,6 @@ EOF
 
 PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig" LD_LIBRARY_PATH="/tmp/temp-rust-1.85/build/x86_64-unknown-linux-gnu/stage3/lib/rustlib/x86_64-unknown-linux-gnu/lib:/usr/local/lib64:/usr/lib" python3 ./x.py build --stage 3
 mkdir -p /usr/local/rust
-cp -r /tmp/host-rust-1.86/build/x86_64-unknown-linux-gnu/stage3* /usr/local/rust/
-
-rm -rf /tmp/temp-rust-1.85
+rm -rf /tmp/temp-rust-1.84
 
 

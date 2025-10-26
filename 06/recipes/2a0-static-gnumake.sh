@@ -27,7 +27,7 @@ sed -i "s|$shuffle_comment|$shuffle_comment\n$shuffle_default|" src/main.c
 grep 'if (!shuffle_mode) shuffle_mode = xstrdup("random");' src/main.c
 
 echo "### $0: building static GNU Make..."
-ash ./configure \
+ash -l ./configure \
 	--build x86_64-linux \
 	--disable-dependency-tracking \
 	--prefix=/store/2a0-static-gnumake \
@@ -36,6 +36,9 @@ ash ./configure \
 ash ./build.sh
 
 echo "### $0: testing static GNU Make by remaking it with itself..."
+
+/store/1-stage1/protobusybox/bin/ash -c '/store/1-stage1/protobusybox/bin/echo hello'
+
 mv make make-intermediate
 ./make-intermediate -j $NPROC clean
 ./make-intermediate -j $NPROC CFLAGS=-O2
