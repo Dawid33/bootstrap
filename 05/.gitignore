@@ -5,3 +5,4 @@ address_map.txt
 tcc-bootstrap
 musl-bootstrap
 musl-bootstrap-final
+out

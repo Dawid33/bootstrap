@@ -1,4 +1,5 @@
 set -x
+echo "Hello, World!"
 ( cd 00; ./hexcompile; )
 (
   cd 01;
@@ -60,5 +61,6 @@ set -x
 	../busybox mkdir -p musl-bootstrap-final/lib
 	(cd musl-final && ../../busybox ash ./build.sh)
 
-	(cd tcc-final && ../$TCCDIR/tcc -Wall -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-final/include tcc.c ../musl-final/lib/*.[oa] -o tcc)
+	../busybox mkdir -p tcc-final/out
+	(cd tcc-final && ../$TCCDIR/tcc -Wall -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-final/include tcc.c ../musl-final/lib/*.[oa] -o out/tcc)
 )

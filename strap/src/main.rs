@@ -2,15 +2,7 @@ use landlock::{
     ABI, Access, AccessFs, Ruleset, RulesetAttr, RulesetCreatedAttr, RulesetError, RulesetStatus,
     path_beneath_rules,
 };
-use std::{
-    cell::RefCell,
-    collections::BTreeMap,
-    fs,
-    io::{BufRead, BufReader, Read},
-    path::PathBuf,
-    process::Stdio,
-    rc::Rc,
-};
+use std::collections::BTreeMap;
 use unshare::{Command, Namespace};
 
 use clap::{Parser, Subcommand};
@@ -20,6 +12,7 @@ use mlua::{
 };
 use serde::{Deserialize, Serialize};
 use simplelog::{Config, SimpleLogger};
+mod runtime;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -47,17 +40,48 @@ struct PkgDerivation {
 
 #[derive(Clone, Debug)]
 struct Version {
-    sources: BTreeMap<String, String>,
-    steps: BTreeMap<String, mlua::Function>,
+    steps: BTreeMap<String, Step>,
+}
+
+#[derive(Clone, Debug)]
+struct Step {
+    pkg_name: String,
+    version: String,
+    step_name: String,
+    deps: BTreeMap<String, mlua::Value>,
+    action: mlua::Function,
+}
+
+impl FromLua for Step {
+    fn from_lua(value: mlua::Value, _lua: &Lua) -> mlua::Result<Self> {
+        let table = value.as_table().unwrap();
+        let version: String = table.get("version").unwrap();
+        let pkg_name: String = table.get("pkg_name").unwrap();
+        let name: String = table.get("step_name").unwrap();
+        let deps: BTreeMap<String, mlua::Value> = table.get("deps").unwrap();
+        let action: mlua::Function = table.get("action").expect("Step must have action.");
+        Ok(Self {
+            deps,
+            action,
+            version,
+            step_name: name,
+            pkg_name,
+        })
+    }
 }
 
 impl FromLua for Version {
     fn from_lua(value: mlua::Value, _lua: &Lua) -> mlua::Result<Self> {
-        let table = value.as_table().unwrap();
-        let sources: BTreeMap<String, String> = table.get("sources").expect("Package must steps.");
-        let steps: BTreeMap<String, mlua::Function> =
-            table.get("steps").expect("Package must steps.");
-        Ok(Self { sources, steps })
+        let steps: BTreeMap<String, Step> = value
+            .as_table()
+            .unwrap()
+            .pairs()
+            .map(|entry| {
+                let (k, v) = entry.unwrap();
+                return (k, v);
+            })
+            .collect();
+        Ok(Self { steps })
     }
 }
 
@@ -72,51 +96,6 @@ impl From<mlua::Value> for PkgDerivation {
         PkgDerivation { name, versions }
     }
 }
-
-pub fn load_lua_globals(lua: &mut Lua, path: &str) {
-    let globals = lua.globals();
-    let package: mlua::Table = globals.get("package").unwrap();
-    package.set("path", path).unwrap();
-    let sh = lua
-        .create_function(|_, cmd: String| -> Result<String, mlua::Error> {
-            let output = std::process::Command::new("sh")
-                .arg("-c")
-                .arg(cmd)
-                .output()
-                .expect("Failed to execute command");
-            let output = String::from_utf8(output.stdout).unwrap();
-            println!("{}", output);
-            Ok(output)
-        })
-        .unwrap();
-    globals.set("sh", sh).unwrap();
-
-    let info = lua
-        .create_function(|_, input: String| Ok(info!("{}", input)))
-        .unwrap();
-    globals.set("info", info).unwrap();
-
-    let exec = lua
-        .create_function(|_, (input, working_directory): (mlua::Table, String)| {
-            let mut iter = input.pairs::<usize, String>().into_iter();
-            let name = iter.next().unwrap().unwrap().1;
-            let mut cmd = std::process::Command::new(name);
-            cmd.current_dir(working_directory);
-            while let Some(arg) = iter.next() {
-                cmd.arg(arg.unwrap().1);
-            }
-            println!(
-                "{}",
-                String::from_utf8(cmd.output().unwrap().stdout).unwrap()
-            );
-            Ok(())
-        })
-        .unwrap();
-    let rust = lua.create_table_from([("exec", exec)]).unwrap();
-    globals.set("rust", rust).unwrap();
-}
-
-fn run_step() {}
 
 fn restrict_thread() -> Result<(), RulesetError> {
     let abi = ABI::V1;
@@ -150,95 +129,24 @@ pub fn main() {
     match &cli.command {
         Some(Commands::Run {
             name,
-            step: step_name,
+            step,
             rooted,
             version,
         }) => {
-            let strap = if *rooted {
+            let strap_path = if *rooted {
                 "/strap"
             } else {
                 "/home/dawids/.local/share/strap"
             };
-            println!("script path: {}/repos/official/bootstrap/00.lua", strap);
-            let script =
-                std::fs::read_to_string(format!("{}/repos/official/bootstrap/00.lua", strap))
-                    .unwrap();
-            let mut lua = Lua::new_with(StdLib::ALL_SAFE, LuaOptions::new()).unwrap();
-
-            load_lua_globals(&mut lua, format!("{}/repos/?.lua", strap).as_str());
-            let chunk = lua.load(script);
-            let output: mlua::Value = chunk.eval().unwrap();
-            let pkg_list = output
-                .as_table()
-                .expect("return from script should be a list of packages.");
-            let mut pkg: Option<(PkgDerivation, Version)> = None;
-            for pair in pkg_list.pairs::<String, mlua::Value>() {
-                let val: mlua::Value = pair.unwrap().1;
-                let pkg_derivation = PkgDerivation::from(val);
-                if &pkg_derivation.name != name {
-                    continue;
-                }
-
-                for (version_regex, version_info) in &pkg_derivation.versions {
-                    let re = regex::Regex::new(version_regex).unwrap();
-                    if re.is_match(version) {
-                        if let Some(_) = version_info.steps.get(step_name) {
-                            pkg = Some((pkg_derivation.clone(), version_info.clone()));
-                        } else {
-                            error!("No step '{}' for pacakge.", step_name);
-                        }
-                        break;
-                    }
-                }
-            }
-
-            let pkg = if let Some(pkg) = pkg {
-                pkg
-            } else {
-                panic!("Package {:?} could not be found", name);
-            };
+            let mut runtime =
+                runtime::Runtime::new(name, strap_path, "/official/bootstrap/tcc-triplet.lua");
 
             if *rooted {
-                let step = pkg.1.steps.get(step_name).unwrap();
-                step.call::<()>(()).unwrap();
+                // Run step in rooted environment
+                runtime.run_step_rooted(version, step);
             } else {
-                let path = format!("{}/steps/{}/{}", strap, pkg.0.name, step_name);
-                if std::fs::exists(&path).unwrap() {
-                    std::fs::remove_dir_all(&path).unwrap();
-                }
-                std::fs::create_dir_all(format!("{}/strap", &path)).unwrap();
-                std::fs::create_dir_all(format!("{}/dev", &path)).unwrap();
-                std::fs::File::create(format!("{}/dev/null", &path)).unwrap();
-                for (name, location) in pkg.1.sources {
-                    std::process::Command::new("git")
-                        .arg("clone")
-                        .arg(location)
-                        .arg(format!("{}/{}", path, name))
-                        .output()
-                        .unwrap();
-                }
-                std::process::Command::new("cp")
-                    .arg("-r")
-                    .arg(format!("{}/repos", strap))
-                    .arg(format!("{}/strap/repos", path))
-                    .output()
-                    .unwrap();
-                std::fs::hard_link(
-                    std::env::current_exe().unwrap(),
-                    format!("{}/strap/strap", path),
-                )
-                .unwrap();
-                unshare::Command::new("/strap/strap")
-                    .arg("run")
-                    .arg(name)
-                    .arg(version)
-                    .arg(step_name)
-                    .arg("--rooted")
-                    .unshare([&Namespace::User])
-                    .chroot_dir(path)
-                    .current_dir("/")
-                    .status()
-                    .unwrap();
+                // Setup rooted environment and call self as rooted program.
+                info!("{:?}", runtime.setup_and_run_step(version, step));
             }
         }
         None => {}
