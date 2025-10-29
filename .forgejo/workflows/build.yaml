@@ -184,5 +184,13 @@ jobs:
         run: ./07/ci.sh temp-rust-1.84.sh
       - name: Build temp-rust-1.85
         run: ./07/ci.sh temp-rust-1.85.sh
-      - name: Build host-rust-1.86
-        run: ./07/ci.sh host-rust-1.86.sh
+      - name: Build temp-rust-1.86
+        run: ./07/ci.sh temp-rust-1.86.sh
+      - name: Build temp-rust-1.87
+        run: ./07/ci.sh temp-rust-1.87.sh
+      - name: Build temp-rust-1.88
+        run: ./07/ci.sh temp-rust-1.88.sh
+      - name: Build temp-rust-1.89
+        run: ./07/ci.sh temp-rust-1.89.sh
+      - name: Build temp-rust-1.90
+        run: ./07/ci.sh temp-rust-1.90.sh

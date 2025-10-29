@@ -31,7 +31,7 @@ set -uex
 
 # ./busybox ash ./initboot.sh 2>&1 | less +F
 
-# TESTING=all-stages
+TESTING=all-stages
 # TESTING=host-python
 # TESTING=host-cpio
 # TESTING=host-bzip2
@@ -55,15 +55,14 @@ set -uex
 # TESTING=temp-rust-1.80
 # TESTING=temp-rust-1.81
 # TESTING=temp-rust-1.82
-TESTING=temp-rust-1.83
+# TESTING=temp-rust-1.83
 # TESTING=temp-rust-1.84
 # TESTING=temp-rust-1.85
 # TESTING=temp-rust-1.86
 # TESTING=temp-rust-1.87
 # TESTING=temp-rust-1.88
 # TESTING=temp-rust-1.89
-# TESTING=temp-rust-1.90
-# TESTING=temp-rust-1.91
+# TESTING=host-rust-1.90
 cd 07;
 cp recipes/$TESTING.sh fs/tmp/recipes/$TESTING.sh
 

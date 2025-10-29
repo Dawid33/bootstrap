@@ -26,6 +26,10 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 /tmp/recipes/temp-rust-1.83.sh
 /tmp/recipes/temp-rust-1.84.sh
 /tmp/recipes/temp-rust-1.85.sh
-/tmp/recipes/host-rust-1.86.sh
+/tmp/recipes/temp-rust-1.86.sh
+/tmp/recipes/temp-rust-1.87.sh
+/tmp/recipes/temp-rust-1.88.sh
+/tmp/recipes/temp-rust-1.89.sh
+/tmp/recipes/temp-rust-1.90.sh
 
 
