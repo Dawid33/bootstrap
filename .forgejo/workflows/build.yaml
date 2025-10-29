@@ -101,7 +101,7 @@ jobs:
           ../busybox mkdir -p fs/usr/local
           ../busybox mkdir -p fs/tmp
           ../busybox mv downloads fs/tmp/downloads
-          ../busybox cp recipes fs/tmp/recipes
+          ../busybox mv recipes fs/tmp/recipes
 
           ../busybox cat > fs/etc/passwd << "EOF"
           root:x:0:0:root:/root:/bin/bash
