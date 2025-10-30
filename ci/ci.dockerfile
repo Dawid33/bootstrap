@@ -8,8 +8,7 @@ ARG \
            sudo \
            git \
            build-essential \
-           libtalloc-dev \
-        
+           libtalloc-dev \        
     && \
     echo "**** Section cleanup ****" \
        && apt-get clean autoclean -y \

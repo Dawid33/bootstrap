@@ -16,7 +16,7 @@ jobs:
           mkdir -p 07/downloads
           cp /07/* 07/downloads
       - name: Build tcc
-        run: proot  --bind=/dev --rootfs=$(pwd) -w / -0 /busybox ash initboot.sh
+        run: proot  --bind=/dev --rootfs=$(pwd) -w / -0 /busybox ash ./ci/initboot.sh
       - name: Download Tarballs And Setup Proto-{tcc,musl,busybox}
         run: proot  --bind=/dev --rootfs=$(pwd) -w / -0 /busybox ash -c 'cd 06 && /busybox ash ./ci_stage1.sh'
       - name: Build proto-{tcc,musl,busybox}
@@ -67,7 +67,7 @@ jobs:
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c4-automake.sh
       - name: Build 2c0-libtool
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c0-libtool.sh
-      - name: Build 2c1-coreutils
+      - name: Build 2c1-file
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b11-file.sh
       - name: Build 2c4-binutils
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c4-binutils.sh
@@ -163,7 +163,7 @@ jobs:
       - name: Build host-openssl
         run: ./07/ci.sh host-openssl.sh
       - name: Build temp-mrustc
-        run: ./07/ci.sh htemp-mrustc.sh
+        run: ./07/ci.sh temp-mrustc.sh
       - name: Build temp-rust-1.76
         run: ./07/ci.sh temp-rust-1.76.sh
       - name: Build temp-rust-1.77
