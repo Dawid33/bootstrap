@@ -163,7 +163,7 @@ jobs:
       - name: Build host-openssl
         run: ./07/ci.sh host-openssl.sh
       - name: Build temp-mrustc
-        run: ./07/ci.shci.shtemp-mrustc.sh
+        run: ./07/ci.sh htemp-mrustc.sh
       - name: Build temp-rust-1.76
         run: ./07/ci.sh temp-rust-1.76.sh
       - name: Build temp-rust-1.77
