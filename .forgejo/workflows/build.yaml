@@ -197,4 +197,6 @@ jobs:
       - name: Build temp-rust-1.90
         run: ./07/ci.sh host-cleanup.sh
       - name: Bundle into image
+        env:
+          DOCKER_CI_PASSWORD: ${{ secrets.DOCKER_CI_PASSWORD }}
         run: cd 07 && ./bundle.sh
