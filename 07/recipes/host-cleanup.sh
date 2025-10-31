@@ -4,7 +4,7 @@ rm -rf /tmp
 rm -rf /usr/local/share/*
 rm -rf /root/.cargo
 
-cat << EOF > /root/.bashrc
+cat << EOF > /etc/profile
 export PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig"
 export LD_LIBRARY_PATH="/usr/lib:/usr/local/lib:/usr/local/lib64"
 export PATH="/bin:/usr/bin:/usr/local/bin"

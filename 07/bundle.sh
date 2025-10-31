@@ -1,6 +1,5 @@
 #!/bin/sh
 
-tar -cpf fs.tar -C fs .
-podman import fs.tar --arch amd64 redox-toolchain-bootstrap
+tar --to-stdout -cpf fs.tar -C fs . | podman import --arch amd64 - redox-toolchain-bootstrap:testing 
 podman login --username dawids --password $DOCKER_CI_PASSWORD forgejo.dawidsobczak.com
-podman push dawids/redox-toolchain-bootstrap:testing docker://forgejo.dawidsobczak.com/dawids/redox-toolchain-bootstrap:testing
+podman push redox-toolchain-bootstrap:testing docker://forgejo.dawidsobczak.com/dawids/redox-toolchain-bootstrap:testing
