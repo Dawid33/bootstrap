@@ -7,6 +7,7 @@ ARG \
            npm \
            sudo \
            git \
+           podman \
            build-essential \
            libtalloc-dev \        
     && \

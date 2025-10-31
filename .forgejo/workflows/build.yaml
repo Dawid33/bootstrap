@@ -194,3 +194,7 @@ jobs:
         run: ./07/ci.sh temp-rust-1.89.sh
       - name: Build temp-rust-1.90
         run: ./07/ci.sh temp-rust-1.90.sh
+      - name: Build temp-rust-1.90
+        run: ./07/ci.sh host-cleanup.sh
+      - name: Bundle into image
+        run: cd 07 && ./bundle.sh
