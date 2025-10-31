@@ -9,3 +9,7 @@ export PKG_CONFIG_PATH="/usr/local/lib64/pkgconfig"
 export LD_LIBRARY_PATH="/usr/lib:/usr/local/lib:/usr/local/lib64"
 export PATH="/bin:/usr/bin:/usr/local/bin"
 EOF
+
+cp /etc/profile /root/.bashrc
+cp /etc/profile /etc/bashrc
+
