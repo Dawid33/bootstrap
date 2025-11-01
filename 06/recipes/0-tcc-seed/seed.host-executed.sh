@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-set -uex
+set -x
 
-../busybox cp tcc-seed stage/store/0-tcc-seed
+cp tcc-seed stage/store/0-tcc-seed

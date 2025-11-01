@@ -2,7 +2,22 @@
 
 An attempt to bootstrap the redox toolchain from a small binary seed.
 
-When building locally, requires make, proot and busybox to be installed.
+## Build
+
+Currently takes 24 hours to fully build (not exaggerating).
+
+Requires latest version of proot to be installed and available in your PATH.
+Makefile build assuming you're on a linux distro with utlities installed. May or
+may not work, easy to debug and start or stop mid way.
+```
+make
+```
+
+CI build. If it crashes you'll need to re-run the whole thing but compiling it
+this way is tested on CI so it should work.
+```
+./build.sh
+```
 
 ## Documentation
 
@@ -17,5 +32,3 @@ When building locally, requires make, proot and busybox to be installed.
     - Try cross compiling to a different architecture in stage 06
 - Compile busybox and static proot in stage 04b or 05a to make it possible to build the project with sh being the only dependency.
     - requires mkdir, cp
-
-

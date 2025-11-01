@@ -18,8 +18,8 @@ tar --strip-components=1 -xf /downloads/binutils-2.39.tar.xz
 echo "### $0: building static binutils..."
 sed -i 's|/bin/sh|/store/1-stage1/protobusybox/bin/ash|' \
 	missing install-sh mkinstalldirs
-mkdir aliases
-ln -s /store/1-stage1/protobusybox/bin/true aliases/makeinfo
+mkdir -p aliases
+ln -sf /store/1-stage1/protobusybox/bin/true aliases/makeinfo
 PATH="/tmp/2a1-static-binutils/aliases:$PATH"
 export lt_cv_sys_max_cmd_len=32768
 # see libtool's 74c8993c178a1386ea5e2363a01d919738402f30

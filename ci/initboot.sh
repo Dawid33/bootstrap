@@ -44,23 +44,39 @@ set -x
   $TCC0 -c $TCCDIR/lib/libtcc1.c -o $TCCDIR/lib/libtcc1.o
   $TCC0 -ar $TCCDIR/lib/libtcc1.a $TCCDIR/lib/*.o
 
-	../busybox mkdir -p $TCCINST/include
-	../busybox cp -r $TCCDIR/include/*.h $TCCINST/include/
-	../busybox cp -r $TCCDIR/lib/libtcc1.a $TCCINST/
+	mkdir -p $TCCINST/include
+	cp -r $TCCDIR/include/*.h $TCCINST/include/
+	cp -r $TCCDIR/lib/libtcc1.a $TCCINST/
 
-	../busybox mkdir -p musl-bootstrap/include
-	../busybox mkdir -p musl-bootstrap/bin
-	../busybox mkdir -p musl-bootstrap/lib
-	../busybox mkdir -p musl-0.6.0/lib
-	(cd musl-0.6.0 && ../../busybox ash ./build.sh)
+	mkdir -p musl-bootstrap/include
+	mkdir -p musl-bootstrap/bin
+	mkdir -p musl-bootstrap/lib
+	mkdir -p musl-0.6.0/lib
+	(cd musl-0.6.0 && ash ./build.sh)
 
 	(cd $TCCDIR && ./tcc0 -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-bootstrap/include tcc.c ../musl-bootstrap/lib/*.[oa] -o tcc)
 
-	../busybox mkdir -p musl-bootstrap-final/include
-	../busybox mkdir -p musl-bootstrap-final/bin
-	../busybox mkdir -p musl-bootstrap-final/lib
-	(cd musl-final && ../../busybox ash ./build.sh)
+	mkdir -p musl-bootstrap-final/include
+	mkdir -p musl-bootstrap-final/bin
+	mkdir -p musl-bootstrap-final/lib
+	(cd musl-final && ash ./build.sh)
 
-	../busybox mkdir -p tcc-final/out
+	mkdir -p tcc-final/out
 	(cd tcc-final && ../$TCCDIR/tcc -Wall -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-final/include tcc.c ../musl-final/lib/*.[oa] -o out/tcc)
+)
+
+(
+  cd 06;
+  export NPROC=$(nproc --all)
+  cp ../05/tcc-final/out/tcc tcc-seed
+
+  # Create a stage directory
+  mkdir -p stage
+
+  # Download all the required source files
+  ash ./helpers/download.sh
+
+  # Inject initial tcc and our scripts; pre-unpack and patch stage 1 sources,
+  # in a separate file because it makes sense to run it separately sometimes.
+  ash ./helpers/seed.sh
 )

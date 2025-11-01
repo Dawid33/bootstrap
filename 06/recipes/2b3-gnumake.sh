@@ -29,7 +29,7 @@ ash ./configure \
 	--build x86_64-linux \
 	--prefix=/store/2b3-gnumake \
 	--disable-dependency-tracking
-make -j $NPROC CFLAGS=-O2
+make -j $NPROC CFLAGS=-O2 LDFLAGS=-static
 
 echo "### $0: installing GNU Make with itself to test it..."
 ./make -j $NPROC SHELL=ash install-strip

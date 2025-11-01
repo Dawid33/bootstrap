@@ -5,8 +5,8 @@ all:
 	$(MAKE) -C 03
 	$(MAKE) -C 04
 	$(MAKE) -C 04a
-	# don't compile all of 05 because it takes a while
 	$(MAKE) -C 05
+	# $(MAKE) -C 06
 clean:
 	$(MAKE) -C 00 clean
 	$(MAKE) -C 01 clean
@@ -15,5 +15,4 @@ clean:
 	$(MAKE) -C 04 clean
 	$(MAKE) -C 04a clean
 	$(MAKE) -C 05 clean
-	rm -f markdown
-	rm -f README.html
+	# $(MAKE) -C 06 clean

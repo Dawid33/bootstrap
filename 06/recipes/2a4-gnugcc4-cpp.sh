@@ -24,7 +24,7 @@ mkdir -p /tmp/2a4-gnugcc4-cpp; cd /tmp/2a4-gnugcc4-cpp
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
 echo "### $0: aliasing ash to sh..."
-mkdir aliases; ln -s /store/1-stage1/protobusybox/bin/ash aliases/sh
+mkdir -p aliases; ln -sf /store/1-stage1/protobusybox/bin/ash aliases/sh
 export PATH="/tmp/2a4-gnugcc4-cpp/aliases:$PATH"
 
 echo "### $0: creating wrappers that make previous GNU GCC target new musl..."
@@ -33,7 +33,7 @@ export _SYSROOT="--sysroot $SYSROOT"
 export _LDFLAG="--dynamic-linker=$SYSROOT/lib/libc.so"
 export _NEWINC="-I$SYSROOT/include"
 export _REALCC="-I$SYSROOT/include"
-mkdir wrappers
+mkdir -p wrappers
 echo '#!/store/1-stage1/protobusybox/bin/ash' > wrappers/cc
 echo '#!/store/1-stage1/protobusybox/bin/ash' > wrappers/cpp
 echo '#!/store/1-stage1/protobusybox/bin/ash' > wrappers/ld
@@ -44,7 +44,7 @@ chmod +x wrappers/cc wrappers/cpp wrappers/ld
 export PATH="/tmp/2a4-gnugcc4-cpp/wrappers:$PATH"
 
 echo "### $0: unpacking GNU GCC 4 sources..."
-mkdir mpfr mpc gmp
+mkdir -p mpfr mpc gmp
 tar --strip-components=1 -xf /downloads/gcc-4.7.4.tar.bz2
 tar --strip-components=1 -xf /downloads/mpfr-2.4.2.tar.xz -C mpfr
 tar --strip-components=1 -xf /downloads/mpc-0.8.1.tar.gz -C mpc

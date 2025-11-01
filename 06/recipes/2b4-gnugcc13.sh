@@ -28,7 +28,7 @@ mkdir -p /tmp/2b4-gnugcc13; cd /tmp/2b4-gnugcc13
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
 echo "### $0: aliasing ash to sh..."
-mkdir aliases; ln -s /store/2b2-busybox/bin/ash aliases/sh
+mkdir -p aliases; ln -sf /store/2b2-busybox/bin/ash aliases/sh
 export PATH="/tmp/2b4-gnugcc13/aliases:$PATH"
 
 SYSROOT=/store/2b0-musl

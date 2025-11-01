@@ -7,7 +7,7 @@ set -uex
 
 export PATH=/store/1-stage1/tinycc/wrappers:/store/1-stage1/protobusybox/bin
 
-mkdir -p /store/2a0-static-gnumake /tmp/2a0-static-gnumake
+mkdir -p /tmp/2a0-static-gnumake
 cd /tmp/2a0-static-gnumake
 
 echo "### $0: unpacking static GNU Make sources..."
@@ -48,7 +48,7 @@ echo "### $0: installing static GNU Make..."
 
 echo "### $0: creating a wrapper that respects \$SHELL..."
 # FIXME: patch make to use getenv?
-mkdir /store/2a0-static-gnumake/wrappers; cd /store/2a0-static-gnumake/wrappers
+mkdir -p /store/2a0-static-gnumake/wrappers; cd /store/2a0-static-gnumake/wrappers
 echo "#!/store/1-stage1/protobusybox/bin/ash" > make
 echo "exec /store/2a0-static-gnumake/bin/make SHELL=\$SHELL \"\$@\"" \ >> make
 chmod +x make

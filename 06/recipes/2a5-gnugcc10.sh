@@ -26,13 +26,13 @@ mkdir -p /tmp/2a5-gnugcc10; cd /tmp/2a5-gnugcc10
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
 echo "### $0: aliasing ash to sh..."
-mkdir aliases; ln -s /store/1-stage1/protobusybox/bin/ash aliases/sh
+mkdir -p aliases; ln -sf /store/1-stage1/protobusybox/bin/ash aliases/sh
 export PATH="/tmp/2a5-gnugcc10/aliases:$PATH"
 
 SYSROOT=/store/2a3-intermediate-musl
 
 echo "### $0: unpacking GNU GCC 10 sources..."
-mkdir gmp mpfr mpc isl
+mkdir -p gmp mpfr mpc isl
 tar --strip-components=1 -xf /downloads/gcc-10.5.0.tar.xz
 tar --strip-components=1 -xf /downloads/gmp-6.1.0.tar.xz -C gmp
 tar --strip-components=1 -xf /downloads/mpfr-3.1.4.tar.xz -C mpfr

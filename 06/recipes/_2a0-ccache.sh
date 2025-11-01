@@ -1,7 +1,7 @@
 #!/store/1-stage1/protobusybox/bin/ash
 
-# FETCH a02f4e8360dc6618bc494ca35b0ae21cea080f804a4898eab1ad3fcd108eb400
-#  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/ccache-3.7.12.tar.xz
+#> FETCH a02f4e8360dc6618bc494ca35b0ae21cea080f804a4898eab1ad3fcd108eb400
+#>  FROM https://github.com/ccache/ccache/releases/download/v3.7.12/ccache-3.7.12.tar.xz
 
 set -uex
 
@@ -28,7 +28,7 @@ mkdir -p .ccache-wrappers
 for prefix in '' x86_64-linux- x86_64-linux-musl- x86_64-linux-unknown-; do
 	for name in cc c++ gcc g++ clang clang++ tcc; do
 		if command -v $prefix$name; then
-			ln -s /store/_2a0-ccache/bin/ccache \
+			ln -sf /store/_2a0-ccache/bin/ccache \
 				.ccache-wrappers/$prefix$name
 		fi
 	done
@@ -40,7 +40,7 @@ chmod +x /store/_2a0-ccache/wrap-available
 
 . /store/_2a0-ccache/wrap-available
 
-mkdir /store/_2a0-ccache/etc
+mkdir -p /store/_2a0-ccache/etc
 cat > /store/_2a0-ccache/etc/ccache.conf <<\EOF
 cache_dir = /ccache
 compiler_check = content

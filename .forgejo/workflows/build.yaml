@@ -12,19 +12,17 @@ jobs:
       - name:  Move tarballs from Docker image into workdir
         run: |
           mkdir -p 06/downloads
-          cp /06/* 06/downloads
+          cp /06/downloads/* 06/downloads
           mkdir -p 07/downloads
-          cp /07/* 07/downloads
-      - name: Build tcc
-        run: proot  --bind=/dev --rootfs=$(pwd) -w / -0 /busybox ash ./ci/initboot.sh
-      - name: Download Tarballs And Setup Proto-{tcc,musl,busybox}
-        run: proot  --bind=/dev --rootfs=$(pwd) -w / -0 /busybox ash -c 'cd 06 && /busybox ash ./ci_stage1.sh'
+          cp /07/downloads/* 07/downloads
+      - name: Build tcc (stages 0-5), download 06 tarballs and initialize stage 06
+        run: ./ci/rooted ./ci/initboot
       - name: Build proto-{tcc,musl,busybox}
-        run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run /recipes/1-stage1.c
+        run: ./ci/rooted_06 /store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run /recipes/1-stage1.c
       - name: Build 2a0-static-gnumake
-        run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a0-static-gnumake.sh
+        run: ./ci/rooted_06 /recipes/2a0-static-gnumake.sh
       - name: Build 2a1-static-binutils
-        run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a1-static-binutils.sh
+        run: ./ci/rooted_06 /recipes/2a1-static-binutils.sh
       - name: Build 2a2-static-gnugcc4-c
         run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a2-static-gnugcc4-c.sh
       - name: Build 2a3-intermediate-musl
@@ -83,7 +81,6 @@ jobs:
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-binutils.sh
       - name: Build 2c1-gcc
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-gcc.sh
-
       - name: Build build-fs
         run: |
           set -uex
@@ -138,64 +135,6 @@ jobs:
           users:x:999:
           nogroup:x:65534:
           EOF
-      - name: Build host-python
-        run: ./07/ci.sh host-python.sh
-      - name: Build host-bzip2
-        run: ./07/ci.sh host-bzip2.sh
-      - name: Build host-busybox
-        run: ./07/ci.sh host-busybox.sh
-      - name: Build host-gettext
-        run: ./07/ci.sh host-gettext.sh
-      - name: Build host-bison
-        run: ./07/ci.sh host-bison.sh
-      - name: Build host-perl
-        run: ./07/ci.sh host-perl.sh
-      - name: Build host-texinfo
-        run: ./07/ci.sh host-texinfo.sh
-      - name: Build host-util-linux
-        run: ./07/ci.sh host-util-linux.sh
-      - name: Build host-cmake
-        run: ./07/ci.sh host-cmake.sh
-      - name: Build host-zlib
-        run: ./07/ci.sh host-zlib.sh
-      - name: Build host-pkg-config
-        run: ./07/ci.sh host-pkg-config.sh
-      - name: Build host-openssl
-        run: ./07/ci.sh host-openssl.sh
-      - name: Build temp-mrustc
-        run: ./07/ci.sh temp-mrustc.sh
-      - name: Build temp-rust-1.76
-        run: ./07/ci.sh temp-rust-1.76.sh
-      - name: Build temp-rust-1.77
-        run: ./07/ci.sh temp-rust-1.77.sh
-      - name: Build temp-rust-1.78
-        run: ./07/ci.sh temp-rust-1.78.sh
-      - name: Build temp-rust-1.79
-        run: ./07/ci.sh temp-rust-1.79.sh
-      - name: Build temp-rust-1.80
-        run: ./07/ci.sh temp-rust-1.80.sh
-      - name: Build temp-rust-1.81
-        run: ./07/ci.sh temp-rust-1.81.sh
-      - name: Build temp-rust-1.82
-        run: ./07/ci.sh temp-rust-1.82.sh
-      - name: Build temp-rust-1.83
-        run: ./07/ci.sh temp-rust-1.83.sh
-      - name: Build temp-rust-1.84
-        run: ./07/ci.sh temp-rust-1.84.sh
-      - name: Build temp-rust-1.85
-        run: ./07/ci.sh temp-rust-1.85.sh
-      - name: Build temp-rust-1.86
-        run: ./07/ci.sh temp-rust-1.86.sh
-      - name: Build temp-rust-1.87
-        run: ./07/ci.sh temp-rust-1.87.sh
-      - name: Build temp-rust-1.88
-        run: ./07/ci.sh temp-rust-1.88.sh
-      - name: Build temp-rust-1.89
-        run: ./07/ci.sh temp-rust-1.89.sh
-      - name: Build temp-rust-1.90
-        run: ./07/ci.sh temp-rust-1.90.sh
-      - name: Build temp-rust-1.90
-        run: ./07/ci.sh host-cleanup.sh
       - name: Bundle into image
         env:
           DOCKER_CI_PASSWORD: ${{ secrets.DOCKER_CI_PASSWORD }}

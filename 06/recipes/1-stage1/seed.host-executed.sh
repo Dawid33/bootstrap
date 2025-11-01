@@ -16,49 +16,49 @@
 #> FETCH b8cc24c9574d809e7279c3be349795c5d5ceb6fdf19ca709f80cde50e47de314
 #>  FROM http://static.dawidsobczak.com/redox-toolchain-bootstrap/busybox-1.36.1.tar.bz2
 
-set -xueo pipefail
+set -x pipefail
 TGT="$DESTDIR/tmp/1-stage1"
 
 	echo $(pwd)
 echo "### $0: unpacking protomusl sources..."
-../busybox mkdir -p "$DESTDIR/protosrc/protomusl"
-../busybox tar --strip-components=1 -xzf downloads/musl-1.2.4.tar.gz -C "$DESTDIR/protosrc/protomusl"
+mkdir -p "$DESTDIR/protosrc/protomusl"
+tar --strip-components=1 -xzf downloads/musl-1.2.4.tar.gz -C "$DESTDIR/protosrc/protomusl"
 
 echo "### $0: unpacking tinycc sources..."
-../busybox mkdir -p "$DESTDIR/protosrc/tinycc"
-../busybox tar --strip-components=1 -xzf downloads/tinycc-mob-af1abf1.tar.gz -C $DESTDIR/protosrc/tinycc
+mkdir -p "$DESTDIR/protosrc/tinycc"
+tar --strip-components=1 -xzf downloads/tinycc-mob-af1abf1.tar.gz -C $DESTDIR/protosrc/tinycc
 
 echo "### $0: unpacking protobusybox sources..."
-../busybox mkdir -p "$DESTDIR/protosrc/protobusybox"
-../busybox tar --strip-components=1 -xjf downloads/busybox-1.36.1.tar.bz2 -C "$DESTDIR/protosrc/protobusybox"
+mkdir -p "$DESTDIR/protosrc/protobusybox"
+tar --strip-components=1 -xjf downloads/busybox-1.36.1.tar.bz2 -C "$DESTDIR/protosrc/protobusybox"
 
-../busybox echo "### $0: patching up protomusl stage 1 sources..."
+echo "### $0: patching up protomusl stage 1 sources..."
 # original syscall_arch.h is not tcc-compatible, our syscall.h is dual-role
-../busybox cp recipes/1-stage1/syscall.h "$DESTDIR/protosrc/protomusl/arch/x86_64/syscall_arch.h"
+cp recipes/1-stage1/syscall.h "$DESTDIR/protosrc/protomusl/arch/x86_64/syscall_arch.h"
 cd "$DESTDIR/protosrc/protomusl/"
 	# eliminiate a source path reference
-	../../../../busybox sed -i 's/__FILE__/"__FILE__"/' include/assert.h
+	sed -i 's/__FILE__/"__FILE__"/' include/assert.h
 	# two files have to be generated with host sed
-	../../../../busybox mkdir -p host-generated/sed1/bits
-	../../../../busybox mkdir -p host-generated/sed2/bits
-	../../../../busybox sed -f ./tools/mkalltypes.sed  ./arch/x86_64/bits/alltypes.h.in ./include/alltypes.h.in  > host-generated/sed1/bits/alltypes.h
-	../../../../busybox sed -n -e s/__NR_/SYS_/p  < arch/x86_64/bits/syscall.h.in  > host-generated/sed2/bits/syscall.h
+	mkdir -p host-generated/sed1/bits
+	mkdir -p host-generated/sed2/bits
+	sed -f ./tools/mkalltypes.sed  ./arch/x86_64/bits/alltypes.h.in ./include/alltypes.h.in  > host-generated/sed1/bits/alltypes.h
+	sed -n -e s/__NR_/SYS_/p  < arch/x86_64/bits/syscall.h.in  > host-generated/sed2/bits/syscall.h
 	# more frivolous patching
 	echo '#define VERSION "1.2.2"' > src/internal/version.h
-	../../../../busybox sed -i 's/@PLT//' src/signal/x86_64/sigsetjmp.s
-	../../../../busybox rm -f src/signal/restore.c  # *BIG URGH*
-	../../../../busybox rm -f src/thread/clone.c  # *BIG URGH #2*
-	../../../../busybox rm -f src/thread/__set_thread_area.c  # possible double-define
-	../../../../busybox rm -f src/thread/__unmapself.c  # double-define
-	../../../../busybox rm -f src/math/sqrtl.c  # tcc-incompatible
-	../../../../busybox rm -f src/math/acoshl.c  # sqrtl dep
-	../../../../busybox rm -f src/math/acosl.c  # sqrtl dep
-	../../../../busybox rm -f src/math/asinhl.c  # sqrtl dep
-	../../../../busybox rm -f src/math/asinl.c  # sqrtl dep
-	../../../../busybox rm -f src/math/hypotl.c  # sqrtl dep
-	../../../../busybox sed -i 's|posix_spawn(&pid, "/bin/sh",|posix_spawnp(\&pid, "sh",|' \
+	sed -i 's/@PLT//' src/signal/x86_64/sigsetjmp.s
+	rm -f src/signal/restore.c  # *BIG URGH*
+	rm -f src/thread/clone.c  # *BIG URGH #2*
+	rm -f src/thread/__set_thread_area.c  # possible double-define
+	rm -f src/thread/__unmapself.c  # double-define
+	rm -f src/math/sqrtl.c  # tcc-incompatible
+	rm -f src/math/acoshl.c  # sqrtl dep
+	rm -f src/math/acosl.c  # sqrtl dep
+	rm -f src/math/asinhl.c  # sqrtl dep
+	rm -f src/math/asinl.c  # sqrtl dep
+	rm -f src/math/hypotl.c  # sqrtl dep
+	sed -i 's|posix_spawn(&pid, "/bin/sh",|posix_spawnp(\&pid, "sh",|' \
 		src/stdio/popen.c src/process/system.c
-	../../../../busybox sed -i 's|execl("/bin/sh", "sh", "-c",|execlp("sh", "-c",|'\
+	sed -i 's|execl("/bin/sh", "sh", "-c",|execlp("sh", "-c",|'\
 		src/misc/wordexp.c
 cd - 
 
@@ -66,11 +66,11 @@ echo "### $0: patching up tinycc stage 1 sources..."
 cd "$DESTDIR/protosrc/tinycc" 
 	:> config.h
 	# eliminate a source path reference
-	../../../../busybox sed -i 's/__FILE__/"__FILE__"/' tcc.h
+	sed -i 's/__FILE__/"__FILE__"/' tcc.h
 	# don't hardcode paths
-	../../../../busybox sed -i 's/SHN_ABS, filename);/SHN_ABS, "FILE stub");/' tccdbg.c
+	sed -i 's/SHN_ABS, filename);/SHN_ABS, "FILE stub");/' tccdbg.c
 	# break a circular dependency
-	../../../../busybox sed -i 's/abort();//' lib/va_list.c
+	sed -i 's/abort();//' lib/va_list.c
 cd -
 
 echo "### $0: patching up protobusybox stage 1 sources..."
@@ -78,9 +78,9 @@ cd  "$DESTDIR/protosrc/protobusybox"
 	:> include/NUM_APPLETS.h
 	:> include/common_bufsiz.h
 	# eliminate a source path reference
-	../../../../busybox sed -i 's/__FILE__/"__FILE__"/' miscutils/fbsplash.c include/libbb.h
+	sed -i 's/__FILE__/"__FILE__"/' miscutils/fbsplash.c include/libbb.h
 	# already fixed in an unreleased version
-	../../../../busybox sed -i 's/extern struct test_statics \*const test_ptr_to_statics/extern struct test_statics *BB_GLOBAL_CONST test_ptr_to_statics/' coreutils/test.c
+	sed -i 's/extern struct test_statics \*const test_ptr_to_statics/extern struct test_statics *BB_GLOBAL_CONST test_ptr_to_statics/' coreutils/test.c
 cd -
 
 echo "### $0: done"

@@ -1,0 +1,6 @@
+#!/bin/sh
+SCRIPT_DIR=$(dirname -- "$0")
+(
+  cd $SCRIPT_DIR;
+  env -i ./bin/proot --rootfs=../06/stage -0 --bind=/dev -w / $@
+)
