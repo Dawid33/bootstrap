@@ -65,18 +65,18 @@ set -x
 	(cd tcc-final && ../$TCCDIR/tcc -Wall -g -static -nostdinc -nostdlib -B ../tcc-bootstrap -I ../musl-final/include tcc.c ../musl-final/lib/*.[oa] -o out/tcc)
 )
 
-(
-  cd 06;
-  export NPROC=$(nproc --all)
-  cp ../05/tcc-final/out/tcc tcc-seed
+# (
+#   cd 06;
+#   export NPROC=$(nproc --all)
+#   cp ../05/tcc-final/out/tcc tcc-seed
 
-  # Create a stage directory
-  mkdir -p stage
+#   # Create a stage directory
+#   mkdir -p stage
 
-  # Download all the required source files
-  ash ./helpers/download.sh
+#   # Download all the required source files
+#   ash ./helpers/download.sh
 
-  # Inject initial tcc and our scripts; pre-unpack and patch stage 1 sources,
-  # in a separate file because it makes sense to run it separately sometimes.
-  ash ./helpers/seed.sh
-)
+#   # Inject initial tcc and our scripts; pre-unpack and patch stage 1 sources,
+#   # in a separate file because it makes sense to run it separately sometimes.
+#   ash ./helpers/seed.sh
+# )
