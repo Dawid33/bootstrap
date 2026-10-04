@@ -6,16 +6,21 @@ on: [push, workflow_dispatch]
 # limit. Jobs hand the workspace to the next one as a tar artifact (source
 # tarballs excluded; every job takes them from the CI image), see
 # .github/actions/stage-{restore,save}.
+# Base image is built and pushed by ci/publish_ci_image.sh.
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   bootstrap:
     name: Stages 0-5, stage1 and static toolchain
     runs-on: self-hosted
     timeout-minutes: 1440
     container:
-      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      image: ghcr.io/dawid33/strap-ci-base:latest
       credentials:
-        username: dawids
-        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -44,10 +49,10 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 1440
     container:
-      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      image: ghcr.io/dawid33/strap-ci-base:latest
       credentials:
-        username: dawids
-        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -76,10 +81,10 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 1440
     container:
-      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      image: ghcr.io/dawid33/strap-ci-base:latest
       credentials:
-        username: dawids
-        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -102,10 +107,10 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 1440
     container:
-      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      image: ghcr.io/dawid33/strap-ci-base:latest
       credentials:
-        username: dawids
-        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -126,10 +131,10 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 1440
     container:
-      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      image: ghcr.io/dawid33/strap-ci-base:latest
       credentials:
-        username: dawids
-        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -162,10 +167,10 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 1440
     container:
-      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      image: ghcr.io/dawid33/strap-ci-base:latest
       credentials:
-        username: dawids
-        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -194,10 +199,10 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 1440
     container:
-      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      image: ghcr.io/dawid33/strap-ci-base:latest
       credentials:
-        username: dawids
-        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
@@ -230,10 +235,10 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 1440
     container:
-      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      image: ghcr.io/dawid33/strap-ci-base:latest
       credentials:
-        username: dawids
-        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
