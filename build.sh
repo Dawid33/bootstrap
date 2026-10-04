@@ -1,20 +1,20 @@
 #!/bin/sh
 
-./ci/rooted ash ./ci/initboot.sh
-proot --rootfs=06/stage -0 --bind=/dev -w / /store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run \
-		/recipes/1-stage1.c
-./ci/rooted_06 /recipes/2a0-static-gnumake.sh
-./ci/rooted_06 /recipes/2a1-static-binutils.sh
-./ci/rooted_06 /recipes/2a2-static-gnugcc4-c.sh
-./ci/rooted_06 /recipes/2a3-intermediate-musl.sh
-./ci/rooted_06 /recipes/2a4-gnugcc4-cpp.sh
-./ci/rooted_06 /recipes/2a5-gnugcc10.sh
-./ci/rooted_06 /recipes/2a6-linux-headers.sh
-./ci/rooted_06 /recipes/2a7-cmake.sh
-./ci/rooted_06 /recipes/2a8-python.sh
-./ci/rooted_06 /recipes/2a9-intermediate-clang.sh
-./ci/rooted_06 /recipes/2b0-musl.sh
-./ci/rooted_06 /recipes/2b1-clang.sh
+# ./ci/rooted ash ./ci/initboot.sh
+# proot --rootfs=06/stage -0 --bind=/dev -w / /store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run \
+# 		/recipes/1-stage1.c
+# ./ci/rooted_06 /recipes/2a0-static-gnumake.sh
+# ./ci/rooted_06 /recipes/2a1-static-binutils.sh
+# ./ci/rooted_06 /recipes/2a2-static-gnugcc4-c.sh
+# ./ci/rooted_06 /recipes/2a3-intermediate-musl.sh
+# ./ci/rooted_06 /recipes/2a4-gnugcc4-cpp.sh
+# ./ci/rooted_06 /recipes/2a5-gnugcc10.sh
+# ./ci/rooted_06 /recipes/2a6-linux-headers.sh
+# ./ci/rooted_06 /recipes/2a7-cmake.sh
+# ./ci/rooted_06 /recipes/2a8-python.sh
+# ./ci/rooted_06 /recipes/2a9-intermediate-clang.sh
+# ./ci/rooted_06 /recipes/2b0-musl.sh
+# ./ci/rooted_06 /recipes/2b1-clang.sh
 ./ci/rooted_06 /recipes/2b2-busybox.sh
 ./ci/rooted_06 /recipes/2b3-gnumake.sh
 ./ci/rooted_06 /recipes/2b4-gnugcc13.sh

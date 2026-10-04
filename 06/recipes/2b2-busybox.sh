@@ -13,7 +13,7 @@ mkdir -p /tmp/2b2-busybox; cd /tmp/2b2-busybox
 if [ -e /ccache/setup ]; then . /ccache/setup; fi
 
 echo "### $0: aliasing ash to sh..."
-mkdir aliases; ln -s /store/1-stage1/protobusybox/bin/ash aliases/sh
+mkdir -p aliases; ln -s /store/1-stage1/protobusybox/bin/ash aliases/sh
 export PATH="/tmp/2b2-busybox/aliases:$PATH"
 
 echo "### $0: unpacking busybox sources..."

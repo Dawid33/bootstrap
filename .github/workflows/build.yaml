@@ -1,0 +1,147 @@
+name: Build Project
+
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    # A full bootstrap takes ~24h, far beyond the 6h limit of GitHub-hosted
+    # runners, so this needs a self-hosted runner (job limit there is 5 days).
+    runs-on: self-hosted
+    timeout-minutes: 4320
+    container:
+      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      credentials:
+        username: dawids
+        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name:  Move tarballs from Docker image into workdir
+        run: |
+          mkdir -p 06/downloads
+          cp /06/downloads/* 06/downloads
+          mkdir -p 07/downloads
+          cp /07/downloads/* 07/downloads
+      - name: Build tcc (stages 0-5), download 06 tarballs and initialize stage 06
+        run: ./ci/rooted ./ci/initboot
+      - name: Build proto-{tcc,musl,busybox}
+        run: ./ci/rooted_06 /store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run /recipes/1-stage1.c
+      - name: Build 2a0-static-gnumake
+        run: ./ci/rooted_06 /recipes/2a0-static-gnumake.sh
+      - name: Build 2a1-static-binutils
+        run: ./ci/rooted_06 /recipes/2a1-static-binutils.sh
+      - name: Build 2a2-static-gnugcc4-c
+        run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a2-static-gnugcc4-c.sh
+      - name: Build 2a3-intermediate-musl
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a3-intermediate-musl.sh
+      - name: Build 2a4-gnugcc4-cpp
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a4-gnugcc4-cpp.sh
+      - name: Build 2a5-gnugcc10
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a5-gnugcc10.sh
+      - name: Build 2a6-linux-headers
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a6-linux-headers.sh
+      - name: Build 2a7-cmake
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0  /recipes/2a7-cmake.sh
+      - name: Build 2a8-python
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a8-python.sh
+      - name: Build 2a9-intermediate-clang
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a9-intermediate-clang.sh
+      - name: Build 2b0-musl
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b0-musl.sh
+      - name: Build 2b1-clang
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b1-clang.sh
+      - name: Build 2b2-busybox
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b2-busybox.sh
+      - name: Build 2b3-gnumake
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b3-gnumake.sh
+      - name: Build 2b4-gnugcc13
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b4-gnugcc13.sh
+      - name: Build 2b5-m4
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b5-m4.sh
+      - name: Build 2b6-grep
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b6-grep.sh
+      - name: Build 2b7-gawk
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b7-gawk.sh
+      - name: Build 2b8-bison
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b8-bison.sh
+      - name: Build 2c3-perl
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c3-perl.sh
+      - name: Build 2c4-autoconf
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c4-autoconf.sh
+      - name: Build 2c4-automake
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c4-automake.sh
+      - name: Build 2c0-libtool
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c0-libtool.sh
+      - name: Build 2c1-file
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b11-file.sh
+      - name: Build 2c4-binutils
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c4-binutils.sh
+      - name: Build 2c1-gcc-intermediate
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-gcc-intermediate.sh
+      - name: Build 2c0-glibc
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c0-glibc.sh
+      - name: Build 2c1-libstdc++
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-libstdc++.sh
+      - name: Build 2c1-crosstools
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-crosstools.sh
+      - name: Build 2c1-binutils
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-binutils.sh
+      - name: Build 2c1-gcc
+        run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-gcc.sh
+      - name: Build build-fs
+        run: |
+          set -uex
+          mkdir -p etc
+          echo "nameserver 8.8.8.8"  > etc/resolv.conf
+          cd 07;
+          ../busybox ash ./download.sh
+          ../busybox cp -r ../06/stage/fs fs
+          ../busybox rm fs/lib64
+          ../busybox ln -s /usr/lib fs/lib64
+          ../busybox rm fs/bin/sh
+          ../busybox ln -s /usr/bin/bash fs/bin/sh
+          ../busybox ln -s /usr/bin/bash fs/bin/bash
+          ../busybox mkdir -p fs/root
+          ../busybox mkdir -p fs/usr/local
+          ../busybox mkdir -p fs/tmp
+          ../busybox mv downloads fs/tmp/downloads
+          ../busybox mv recipes fs/tmp/recipes
+
+          ../busybox cat > fs/etc/passwd << "EOF"
+          root:x:0:0:root:/root:/bin/bash
+          bin:x:1:1:bin:/dev/null:/usr/bin/false
+          daemon:x:6:6:Daemon User:/dev/null:/usr/bin/false
+          messagebus:x:18:18:D-Bus Message Daemon User:/run/dbus:/usr/bin/false
+          uuidd:x:80:80:UUID Generation Daemon User:/dev/null:/usr/bin/false
+          nobody:x:65534:65534:Unprivileged User:/dev/null:/usr/bin/false
+          EOF
+
+          ../busybox cat > fs/etc/group << "EOF"
+          root:x:0:
+          bin:x:1:daemon
+          sys:x:2:
+          kmem:x:3:
+          tape:x:4:
+          tty:x:5:
+          daemon:x:6:
+          floppy:x:7:
+          disk:x:8:
+          lp:x:9:
+          dialout:x:10:
+          audio:x:11:
+          video:x:12:
+          utmp:x:13:
+          cdrom:x:15:
+          adm:x:16:
+          messagebus:x:18:
+          input:x:24:
+          mail:x:34:
+          kvm:x:61:
+          uuidd:x:80:
+          wheel:x:97:
+          users:x:999:
+          nogroup:x:65534:
+          EOF
+      - name: Bundle into image
+        env:
+          DOCKER_CI_PASSWORD: ${{ secrets.DOCKER_CI_PASSWORD }}
+        run: cd 07 && ./bundle.sh
