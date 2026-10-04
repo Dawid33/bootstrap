@@ -20,7 +20,7 @@ ARG \
            /tmp/*
 
 
-RUN git clone https://forgejo.dawidsobczak.com/mirror/proot /proot
+RUN git clone --depth 1 https://github.com/proot-me/proot /proot
 WORKDIR /proot/src
 RUN make && make install
 ADD 06/downloads /06/downloads
