@@ -19,6 +19,7 @@ ROOT=$(pwd)
 if [ ! -e busybox ]; then
 	ln -s ci/bin/busybox busybox
 	trap 'rm -f "$ROOT/busybox"' EXIT
+	trap 'exit 1' INT TERM HUP  # sh skips the EXIT trap on signals otherwise
 fi
 (cd 07 && sh ./download.sh)
 
