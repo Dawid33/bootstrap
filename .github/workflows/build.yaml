@@ -2,11 +2,11 @@ name: Build Project
 
 on: [push, workflow_dispatch]
 
-# The full bootstrap (~24h) is split into jobs that each fit a runner's time
-# limit. Jobs hand the workspace to the next one as a tar artifact (source
-# tarballs excluded; every job takes them from the CI image), see
-# .github/actions/stage-{restore,save}.
-# Base image is built and pushed by ci/publish_ci_image.sh.
+# The full bootstrap (~24h) is split into jobs that each fit the 6h limit of
+# GitHub-hosted runners. Jobs hand the workspace to the next one as a tar
+# artifact (source tarballs excluded), see .github/actions/stage-{restore,save}.
+# Source tarballs are streamed from the CI base image built and pushed by
+# ci/publish_ci_image.sh, see ci/fetch_ci_sources.sh.
 permissions:
   contents: read
   packages: read
@@ -14,20 +14,27 @@ permissions:
 jobs:
   bootstrap:
     name: Stages 0-5, stage1 and static toolchain
-    runs-on: self-hosted
-    timeout-minutes: 1440
-    container:
-      image: ghcr.io/dawid33/strap-ci-base:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Free disk space and move workspace to /mnt
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo mkdir -p /mnt/work
+          sudo chown "$(id -u):$(id -g)" /mnt/work
+          sudo mount --bind /mnt/work "$GITHUB_WORKSPACE"
+          df -h / /mnt
       - name: Checkout the repo
         uses: actions/checkout@v4
-      - name: Restore build tree
-        uses: ./.github/actions/stage-restore
-      - name: Build tcc (stages 0-5), download 06 tarballs and initialize stage 06
-        run: ./ci/rooted ./ci/initboot
+      - name: Set up build tools
+        uses: ./.github/actions/setup-tools
+        with:
+          sources: '06'
+      - name: Build tcc (stages 0-5)
+        run: ./ci/rooted ash ./ci/initboot.sh
+      - name: Initialize stage 06
+        run: cd 06 && NPROC=$(nproc) ./helpers/seed.sh
       - name: Build proto-{tcc,musl,busybox}
         run: ./ci/rooted_06 /store/0-tcc-seed -I /protosrc/tinycc/include -nostdinc -nostdlib -Werror -run /recipes/1-stage1.c
       - name: Build 2a0-static-gnumake
@@ -46,16 +53,23 @@ jobs:
   gcc:
     name: gcc 4 C++, gcc 10, headers, cmake, python
     needs: bootstrap
-    runs-on: self-hosted
-    timeout-minutes: 1440
-    container:
-      image: ghcr.io/dawid33/strap-ci-base:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Free disk space and move workspace to /mnt
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo mkdir -p /mnt/work
+          sudo chown "$(id -u):$(id -g)" /mnt/work
+          sudo mount --bind /mnt/work "$GITHUB_WORKSPACE"
+          df -h / /mnt
       - name: Checkout the repo
         uses: actions/checkout@v4
+      - name: Set up build tools
+        uses: ./.github/actions/setup-tools
+        with:
+          sources: '06'
       - name: Restore build tree
         uses: ./.github/actions/stage-restore
         with:
@@ -78,16 +92,23 @@ jobs:
   intermediate-clang:
     name: Intermediate clang and musl
     needs: gcc
-    runs-on: self-hosted
-    timeout-minutes: 1440
-    container:
-      image: ghcr.io/dawid33/strap-ci-base:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Free disk space and move workspace to /mnt
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo mkdir -p /mnt/work
+          sudo chown "$(id -u):$(id -g)" /mnt/work
+          sudo mount --bind /mnt/work "$GITHUB_WORKSPACE"
+          df -h / /mnt
       - name: Checkout the repo
         uses: actions/checkout@v4
+      - name: Set up build tools
+        uses: ./.github/actions/setup-tools
+        with:
+          sources: '06'
       - name: Restore build tree
         uses: ./.github/actions/stage-restore
         with:
@@ -104,16 +125,23 @@ jobs:
   clang:
     name: Final clang
     needs: intermediate-clang
-    runs-on: self-hosted
-    timeout-minutes: 1440
-    container:
-      image: ghcr.io/dawid33/strap-ci-base:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Free disk space and move workspace to /mnt
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo mkdir -p /mnt/work
+          sudo chown "$(id -u):$(id -g)" /mnt/work
+          sudo mount --bind /mnt/work "$GITHUB_WORKSPACE"
+          df -h / /mnt
       - name: Checkout the repo
         uses: actions/checkout@v4
+      - name: Set up build tools
+        uses: ./.github/actions/setup-tools
+        with:
+          sources: '06'
       - name: Restore build tree
         uses: ./.github/actions/stage-restore
         with:
@@ -128,16 +156,23 @@ jobs:
   userland:
     name: busybox, make, gcc 13, m4, grep, gawk, bison
     needs: clang
-    runs-on: self-hosted
-    timeout-minutes: 1440
-    container:
-      image: ghcr.io/dawid33/strap-ci-base:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Free disk space and move workspace to /mnt
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo mkdir -p /mnt/work
+          sudo chown "$(id -u):$(id -g)" /mnt/work
+          sudo mount --bind /mnt/work "$GITHUB_WORKSPACE"
+          df -h / /mnt
       - name: Checkout the repo
         uses: actions/checkout@v4
+      - name: Set up build tools
+        uses: ./.github/actions/setup-tools
+        with:
+          sources: '06'
       - name: Restore build tree
         uses: ./.github/actions/stage-restore
         with:
@@ -164,16 +199,23 @@ jobs:
   autotools:
     name: perl, autotools, libtool, file
     needs: userland
-    runs-on: self-hosted
-    timeout-minutes: 1440
-    container:
-      image: ghcr.io/dawid33/strap-ci-base:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Free disk space and move workspace to /mnt
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo mkdir -p /mnt/work
+          sudo chown "$(id -u):$(id -g)" /mnt/work
+          sudo mount --bind /mnt/work "$GITHUB_WORKSPACE"
+          df -h / /mnt
       - name: Checkout the repo
         uses: actions/checkout@v4
+      - name: Set up build tools
+        uses: ./.github/actions/setup-tools
+        with:
+          sources: '06'
       - name: Restore build tree
         uses: ./.github/actions/stage-restore
         with:
@@ -193,19 +235,26 @@ jobs:
         with:
           name: tree-autotools
 
-  cross:
-    name: binutils, glibc and gcc for /fs
+  cross-glibc:
+    name: binutils, intermediate gcc and glibc for /fs
     needs: autotools
-    runs-on: self-hosted
-    timeout-minutes: 1440
-    container:
-      image: ghcr.io/dawid33/strap-ci-base:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Free disk space and move workspace to /mnt
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo mkdir -p /mnt/work
+          sudo chown "$(id -u):$(id -g)" /mnt/work
+          sudo mount --bind /mnt/work "$GITHUB_WORKSPACE"
+          df -h / /mnt
       - name: Checkout the repo
         uses: actions/checkout@v4
+      - name: Set up build tools
+        uses: ./.github/actions/setup-tools
+        with:
+          sources: '06'
       - name: Restore build tree
         uses: ./.github/actions/stage-restore
         with:
@@ -216,6 +265,35 @@ jobs:
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-gcc-intermediate.sh
       - name: Build 2c0-glibc
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c0-glibc.sh
+      - name: Save build tree
+        uses: ./.github/actions/stage-save
+        with:
+          name: tree-cross-glibc
+
+  cross-gcc:
+    name: libstdc++, crosstools, binutils and gcc for /fs
+    needs: cross-glibc
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Free disk space and move workspace to /mnt
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo mkdir -p /mnt/work
+          sudo chown "$(id -u):$(id -g)" /mnt/work
+          sudo mount --bind /mnt/work "$GITHUB_WORKSPACE"
+          df -h / /mnt
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Set up build tools
+        uses: ./.github/actions/setup-tools
+        with:
+          sources: '06'
+      - name: Restore build tree
+        uses: ./.github/actions/stage-restore
+        with:
+          from: tree-cross-glibc
       - name: Build 2c1-libstdc++
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-libstdc++.sh
       - name: Build 2c1-crosstools
@@ -227,25 +305,32 @@ jobs:
       - name: Save build tree
         uses: ./.github/actions/stage-save
         with:
-          name: tree-cross
+          name: tree-cross-gcc
 
   bundle:
     name: Assemble 07 fs and push image
-    needs: cross
-    runs-on: self-hosted
-    timeout-minutes: 1440
-    container:
-      image: ghcr.io/dawid33/strap-ci-base:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+    needs: cross-gcc
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Free disk space and move workspace to /mnt
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo mkdir -p /mnt/work
+          sudo chown "$(id -u):$(id -g)" /mnt/work
+          sudo mount --bind /mnt/work "$GITHUB_WORKSPACE"
+          df -h / /mnt
       - name: Checkout the repo
         uses: actions/checkout@v4
+      - name: Set up build tools
+        uses: ./.github/actions/setup-tools
+        with:
+          sources: '07'
       - name: Restore build tree
         uses: ./.github/actions/stage-restore
         with:
-          from: tree-cross
+          from: tree-cross-gcc
       - name: Build build-fs
         run: |
           set -uex

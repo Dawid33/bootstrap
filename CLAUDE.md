@@ -24,7 +24,7 @@ Docs: `docs/BOOTSTRAP.md` (stages 00–05, including the x86-64 instruction subs
 ## Commands
 
 - Stages 00–05: `make` at the top level (runs `make -C` for 00..05; 06 is commented out). `make clean` likewise.
-- CI-equivalent full run: `./build.sh` (stages 0–5 via `ci/initboot.sh` under `ci/rooted`, then every 06 recipe via `ci/rooted_06`). The Forgejo workflow `.forgejo/workflows/build.yaml` is the canonical step list, including the 07 fs setup and `07/bundle.sh` (podman image push).
+- CI-equivalent full run: `./build.sh` (stages 0–5 via `ci/initboot.sh` under `ci/rooted`, then every 06 recipe via `ci/rooted_06`). The Forgejo workflow `.forgejo/workflows/build.yaml` is the canonical step list, including the 07 fs setup and `07/bundle.sh` (podman image push). `.github/workflows/build.yaml` is the GitHub Actions port: the same steps split into chained jobs on GitHub-hosted runners (6h each), passing the workspace as tar artifacts and streaming source tarballs from the `ghcr.io/dawid33/strap-ci-base` image (`ci/fetch_ci_sources.sh`); rebuild and push that image with `ci/publish_ci_image.sh`.
 - Run a single 06 recipe: `./ci/rooted_06 /recipes/<name>.sh` (proot into `06/stage` with `/dev` bound). 06 recipe tests are the `06/recipes/_<id>.test.sh` scripts, run the same way.
 - 07: `cd 07 && ./build_fs.sh` (downloads sources and assembles `fs/` from `../06/stage/fs`), then from the repo root `07/ci.sh <recipe>.sh` runs one recipe inside `07/fs` via `/usr/local/bin/proot` (binds host `/dev`, `/etc`, `/proc`). `07/recipes/all-stages.sh` is the ordered list. `07/chroot.sh` gives an interactive shell in `fs`.
 - Requires a recent `proot` on PATH (or `/usr/local/bin/proot` for 07). `ci/rooted` uses the bundled `ci/bin/proot` with a scrubbed env.

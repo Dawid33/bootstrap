@@ -1,34 +1,24 @@
 name: Restore build tree
-description: >
-  Copy the source tarballs baked into the CI image into the workspace and,
-  if given, unpack the build tree saved by a previous job.
+description: Unpack the build tree saved by a previous job.
 inputs:
   from:
-    description: Artifact name of the build tree to restore (empty for the first job)
-    default: ''
+    description: Artifact name of the build tree to restore
+    required: true
 runs:
   using: composite
   steps:
-    - name: Move tarballs from Docker image into workdir
-      shell: sh -e {0}
-      run: |
-        mkdir -p 06/downloads
-        cp /06/downloads/* 06/downloads
-        mkdir -p 07/downloads
-        cp /07/downloads/* 07/downloads
     - name: Download build tree
-      if: inputs.from != ''
       uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.from }}
         path: ${{ runner.temp }}/tree
     - name: Unpack build tree
-      if: inputs.from != ''
       shell: sh -e {0}
       run: |
         tar -xzpf "$RUNNER_TEMP/tree/tree.tar.gz"
         rm -rf "$RUNNER_TEMP/tree"
-        # Tarballs are left out of the artifact; put them back where seed.sh copied them.
-        if [ -d 06/stage/downloads ]; then
-          cp /06/downloads/* 06/stage/downloads
+        # Tarballs are left out of the artifact; put them back where seed.sh
+        # copied them (jobs that only fetch the 07 sources don't need them).
+        if [ -d 06/stage/downloads ] && [ -d 06/downloads ]; then
+          cp 06/downloads/* 06/stage/downloads
         fi

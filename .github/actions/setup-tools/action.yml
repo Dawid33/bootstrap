@@ -1,0 +1,37 @@
+name: Set up build tools
+description: >
+  Build proot, provide the ash/busybox the scripts expect, and stream the
+  source tarballs out of the CI base image on ghcr.io.
+inputs:
+  sources:
+    description: Which download dirs to fetch from the image ("06", "07" or "06 07")
+    default: '06'
+runs:
+  using: composite
+  steps:
+    - name: Build proot
+      shell: bash
+      run: |
+        set -eux
+        sudo apt-get update -q
+        sudo apt-get install -y --no-install-recommends libtalloc-dev
+        # same commit the CI base image was last built with
+        git init -q "$RUNNER_TEMP/proot"
+        cd "$RUNNER_TEMP/proot"
+        git fetch -q --depth 1 https://github.com/proot-me/proot 25dc6a3134891f98a79f57ce1c2c1b23ff15cad1
+        git checkout -q FETCH_HEAD
+        make -C src -j"$(nproc)"
+        sudo make -C src install
+        proot --version
+    - name: Provide ash and busybox
+      shell: bash
+      run: |
+        # 06/helpers/seed.sh runs its host scripts with ash; 07 build-fs calls ../busybox
+        sudo ln -sf "$PWD/ci/bin/busybox" /usr/local/bin/ash
+        ln -sf ci/bin/busybox busybox
+    - name: Fetch source tarballs from the CI image
+      shell: bash
+      env:
+        GHCR_USER: ${{ github.actor }}
+        GHCR_TOKEN: ${{ github.token }}
+      run: ./ci/fetch_ci_sources.sh ${{ inputs.sources }}
