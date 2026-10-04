@@ -6,3 +6,4 @@ tcc-bootstrap
 musl-bootstrap
 musl-bootstrap-final
 out
+/test
