@@ -5,7 +5,9 @@ for source in $sources; do
   if test -e $source; then
     echo "OK $source"
   else
-    ../../busybox wget "http://static.dawidsobczak.com/redox-toolchain-bootstrap/$source"
+    # download to .part first so an interrupted fetch isn't mistaken for a complete file
+    ../../busybox wget -O "$source.part" "http://static.dawidsobczak.com/redox-toolchain-bootstrap/$source" &&
+      ../../busybox mv "$source.part" "$source"
   fi
 done
 
@@ -20,7 +22,9 @@ for recipe in ../recipes/*.sh; do
       *)
         if test -n "$hash" && test -n "$url"; then
           file="${file:-$(basename "$url")}"
-          test -e "$file" || ../../busybox wget -O "$file" "$url"
+          if ! test -e "$file"; then
+            ../../busybox wget -O "$file.part" "$url" && ../../busybox mv "$file.part" "$file"
+          fi
           echo "$hash  $file" | ../../busybox sha256sum -c || exit 1
         fi
         hash=""; url=""; file="" ;;
