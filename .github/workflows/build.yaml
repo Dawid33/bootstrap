@@ -1,12 +1,16 @@
 name: Build Project
 
 on: [push, workflow_dispatch]
+
+# The full bootstrap (~24h) is split into jobs that each fit a runner's time
+# limit. Jobs hand the workspace to the next one as a tar artifact (source
+# tarballs excluded; every job takes them from the CI image), see
+# .github/actions/stage-{restore,save}.
 jobs:
-  build:
-    # A full bootstrap takes ~24h, far beyond the 6h limit of GitHub-hosted
-    # runners, so this needs a self-hosted runner (job limit there is 5 days).
+  bootstrap:
+    name: Stages 0-5, stage1 and static toolchain
     runs-on: self-hosted
-    timeout-minutes: 4320
+    timeout-minutes: 1440
     container:
       image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
       credentials:
@@ -15,12 +19,8 @@ jobs:
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
-      - name:  Move tarballs from Docker image into workdir
-        run: |
-          mkdir -p 06/downloads
-          cp /06/downloads/* 06/downloads
-          mkdir -p 07/downloads
-          cp /07/downloads/* 07/downloads
+      - name: Restore build tree
+        uses: ./.github/actions/stage-restore
       - name: Build tcc (stages 0-5), download 06 tarballs and initialize stage 06
         run: ./ci/rooted ./ci/initboot
       - name: Build proto-{tcc,musl,busybox}
@@ -33,6 +33,28 @@ jobs:
         run: proot  --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a2-static-gnugcc4-c.sh
       - name: Build 2a3-intermediate-musl
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a3-intermediate-musl.sh
+      - name: Save build tree
+        uses: ./.github/actions/stage-save
+        with:
+          name: tree-bootstrap
+
+  gcc:
+    name: gcc 4 C++, gcc 10, headers, cmake, python
+    needs: bootstrap
+    runs-on: self-hosted
+    timeout-minutes: 1440
+    container:
+      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      credentials:
+        username: dawids
+        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Restore build tree
+        uses: ./.github/actions/stage-restore
+        with:
+          from: tree-bootstrap
       - name: Build 2a4-gnugcc4-cpp
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a4-gnugcc4-cpp.sh
       - name: Build 2a5-gnugcc10
@@ -43,12 +65,78 @@ jobs:
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0  /recipes/2a7-cmake.sh
       - name: Build 2a8-python
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a8-python.sh
+      - name: Save build tree
+        uses: ./.github/actions/stage-save
+        with:
+          name: tree-gcc
+
+  intermediate-clang:
+    name: Intermediate clang and musl
+    needs: gcc
+    runs-on: self-hosted
+    timeout-minutes: 1440
+    container:
+      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      credentials:
+        username: dawids
+        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Restore build tree
+        uses: ./.github/actions/stage-restore
+        with:
+          from: tree-gcc
       - name: Build 2a9-intermediate-clang
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2a9-intermediate-clang.sh
       - name: Build 2b0-musl
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b0-musl.sh
+      - name: Save build tree
+        uses: ./.github/actions/stage-save
+        with:
+          name: tree-intermediate-clang
+
+  clang:
+    name: Final clang
+    needs: intermediate-clang
+    runs-on: self-hosted
+    timeout-minutes: 1440
+    container:
+      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      credentials:
+        username: dawids
+        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Restore build tree
+        uses: ./.github/actions/stage-restore
+        with:
+          from: tree-intermediate-clang
       - name: Build 2b1-clang
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b1-clang.sh
+      - name: Save build tree
+        uses: ./.github/actions/stage-save
+        with:
+          name: tree-clang
+
+  userland:
+    name: busybox, make, gcc 13, m4, grep, gawk, bison
+    needs: clang
+    runs-on: self-hosted
+    timeout-minutes: 1440
+    container:
+      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      credentials:
+        username: dawids
+        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Restore build tree
+        uses: ./.github/actions/stage-restore
+        with:
+          from: tree-clang
       - name: Build 2b2-busybox
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b2-busybox.sh
       - name: Build 2b3-gnumake
@@ -63,6 +151,28 @@ jobs:
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b7-gawk.sh
       - name: Build 2b8-bison
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b8-bison.sh
+      - name: Save build tree
+        uses: ./.github/actions/stage-save
+        with:
+          name: tree-userland
+
+  autotools:
+    name: perl, autotools, libtool, file
+    needs: userland
+    runs-on: self-hosted
+    timeout-minutes: 1440
+    container:
+      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      credentials:
+        username: dawids
+        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Restore build tree
+        uses: ./.github/actions/stage-restore
+        with:
+          from: tree-userland
       - name: Build 2c3-perl
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c3-perl.sh
       - name: Build 2c4-autoconf
@@ -73,6 +183,28 @@ jobs:
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c0-libtool.sh
       - name: Build 2c1-file
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2b11-file.sh
+      - name: Save build tree
+        uses: ./.github/actions/stage-save
+        with:
+          name: tree-autotools
+
+  cross:
+    name: binutils, glibc and gcc for /fs
+    needs: autotools
+    runs-on: self-hosted
+    timeout-minutes: 1440
+    container:
+      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      credentials:
+        username: dawids
+        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Restore build tree
+        uses: ./.github/actions/stage-restore
+        with:
+          from: tree-autotools
       - name: Build 2c4-binutils
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c4-binutils.sh
       - name: Build 2c1-gcc-intermediate
@@ -87,6 +219,28 @@ jobs:
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-binutils.sh
       - name: Build 2c1-gcc
         run: proot --bind=/dev --rootfs=$(pwd)/06/stage -w / -0 /recipes/2c1-gcc.sh
+      - name: Save build tree
+        uses: ./.github/actions/stage-save
+        with:
+          name: tree-cross
+
+  bundle:
+    name: Assemble 07 fs and push image
+    needs: cross
+    runs-on: self-hosted
+    timeout-minutes: 1440
+    container:
+      image: forgejo.dawidsobczak.com/dawids/strap-ci-base:latest
+      credentials:
+        username: dawids
+        password: ${{ secrets.DOCKER_CI_PASSWORD }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: Restore build tree
+        uses: ./.github/actions/stage-restore
+        with:
+          from: tree-cross
       - name: Build build-fs
         run: |
           set -uex

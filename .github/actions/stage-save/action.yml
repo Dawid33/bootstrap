@@ -1,0 +1,30 @@
+name: Save build tree
+description: >
+  Pack the workspace (stage outputs and 06/stage, without source tarballs or
+  .git) and upload it for the next job.
+inputs:
+  name:
+    description: Artifact name to save the build tree under
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Pack build tree
+      shell: sh -e {0}
+      run: |
+        tar -czpf "$RUNNER_TEMP/tree.tar.gz" \
+          --exclude=./.git \
+          --exclude=./06/downloads \
+          --exclude=./07/downloads \
+          --exclude='./06/stage/downloads/*' \
+          .
+    - name: Upload build tree
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.name }}
+        path: ${{ runner.temp }}/tree.tar.gz
+        compression-level: 0
+        retention-days: 3
+    - name: Remove local tarball
+      shell: sh -e {0}
+      run: rm -f "$RUNNER_TEMP/tree.tar.gz"
