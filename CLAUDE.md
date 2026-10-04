@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A from-source bootstrap of the Redox toolchain starting from a tiny hand-written binary seed. Each numbered directory is a stage whose output is the input to the next; nothing from the host compiler toolchain is meant to leak into the result. A full build takes ~24 hours, so never kick off the whole chain to "check" a change — run only the stage/recipe you touched.
 
+## Working in this repo
+
+Never create git worktrees here (no `EnterWorktree`, no `git worktree add`) — work directly in the main checkout on `trunk`. Build outputs (`06/stage`, `07/fs`, downloads) are huge and live only in the main checkout.
+
 ## Stage pipeline
 
 | Stage | What it is | Built by |
