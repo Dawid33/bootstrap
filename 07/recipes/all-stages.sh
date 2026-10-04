@@ -27,6 +27,9 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 /tmp/recipes/temp-rust-1.98.sh
 /tmp/recipes/temp-rust-1.99.sh
 /tmp/recipes/temp-rust-1.100.sh
+/tmp/recipes/host-musl.sh
 /tmp/recipes/host-rust-1.101.sh
+/tmp/recipes/host-cpio.sh
+/tmp/recipes/ftl.sh
 
 
